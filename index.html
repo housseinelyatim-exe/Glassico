@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glassico — Editorial Eyewear</title>
+  <meta name="description" content="Luxury architectural eyewear. Curated collections from Oliver Peoples, Tom Ford, Persol and more.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .page-body { padding-top: 0; }
+  </style>
+</head>
+<body class="page-body">
+
+  <!-- main.js injects announcement bar + navbar -->
+
+  <!-- ═══════════════════════════════════════
+       HERO
+  ═══════════════════════════════════════ -->
+  <section class="hero container">
+    <div class="hero__content">
+      <p class="hero__eyebrow">New Collection 2024</p>
+      <h1 class="hero__title">Vision,<br>Refined.</h1>
+      <p class="hero__sub">
+        Architectural eyewear for those who see the world as a composition.
+        Discover frames that elevate without announcing themselves.
+      </p>
+      <div class="hero__actions">
+        <a href="shop.html" class="btn-dark">SHOP NEW ARRIVALS</a>
+        <a href="shop.html" class="btn-outline">EXPLORE ALL</a>
+      </div>
+    </div>
+    <div class="hero__image-wrap">
+      <img src="images/placeholder.svg" alt="Glassico Editorial Eyewear" width="480" height="480">
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       BRAND STRIP
+  ═══════════════════════════════════════ -->
+  <div class="brand-strip">
+    <div class="brand-strip__inner">
+      <span class="brand-strip__name">Oliver Peoples</span>
+      <span class="brand-strip__name">Tom Ford</span>
+      <span class="brand-strip__name">Persol</span>
+      <span class="brand-strip__name">Moscot</span>
+      <span class="brand-strip__name">Garrett Leight</span>
+      <span class="brand-strip__name">Cutler &amp; Gross</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       CURATED COLLECTIONS
+  ═══════════════════════════════════════ -->
+  <section class="collections container">
+    <div class="collections__header">
+      <div>
+        <p class="caps text-gold" style="margin-bottom:8px;">The Edit</p>
+        <h2>Curated Collections</h2>
+      </div>
+      <a href="shop.html" class="btn-outline btn-sm">VIEW ALL →</a>
+    </div>
+
+    <div class="collections__grid">
+
+      <!-- Large left card — Men's Edit -->
+      <a href="shop.html?gender=men" class="collection-card collection-card--tall">
+        <img class="collection-card__bg" src="images/placeholder.svg" alt="Men's Edit" loading="lazy">
+        <div class="collection-card__overlay">
+          <div class="collection-card__label">The Collection</div>
+          <div class="collection-card__title">Men's Edit</div>
+          <div class="collection-card__arrow">Explore →</div>
+        </div>
+      </a>
+
+      <!-- Top-right — Women's Edit -->
+      <a href="shop.html?gender=women" class="collection-card">
+        <img class="collection-card__bg" src="images/placeholder.svg" alt="Women's Edit" loading="lazy">
+        <div class="collection-card__overlay">
+          <div class="collection-card__label">The Collection</div>
+          <div class="collection-card__title">Women's Edit</div>
+          <div class="collection-card__arrow">Explore →</div>
+        </div>
+      </a>
+
+      <!-- Bottom-right — Sun Collection -->
+      <a href="shop.html?shape=aviator" class="collection-card">
+        <img class="collection-card__bg" src="images/placeholder.svg" alt="Sun Collection" loading="lazy">
+        <div class="collection-card__overlay">
+          <div class="collection-card__label">Summer</div>
+          <div class="collection-card__title">Sun Collection</div>
+          <div class="collection-card__arrow">Explore →</div>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       FEATURES
+  ═══════════════════════════════════════ -->
+  <section class="features" style="background:var(--surface);">
+    <div class="container">
+      <div class="feature-grid">
+        <div class="feature-item">
+          <div class="feature-item__icon">🚚</div>
+          <div class="feature-item__title">Complimentary Shipping</div>
+          <div class="feature-item__desc">On all orders over $200. Express available at checkout.</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-item__icon">🔄</div>
+          <div class="feature-item__title">30-Day Returns</div>
+          <div class="feature-item__desc">Unworn frames in original case, no questions asked.</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-item__icon">👓</div>
+          <div class="feature-item__title">Virtual Try-On</div>
+          <div class="feature-item__desc">See how every frame looks on your face before you buy.</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-item__icon">✦</div>
+          <div class="feature-item__title">Curation Service</div>
+          <div class="feature-item__desc">Personalised styling advice from our editorial team.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       FEATURED PRODUCTS (dynamic)
+  ═══════════════════════════════════════ -->
+  <section style="padding:80px 0;">
+    <div class="container">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:36px;">
+        <div>
+          <p class="caps text-gold" style="margin-bottom:8px;">Handpicked</p>
+          <h2>New Arrivals</h2>
+        </div>
+        <a href="shop.html" class="btn-outline btn-sm">SEE ALL →</a>
+      </div>
+      <div class="products-grid" id="featured-grid">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       EDITORIAL BANNER
+  ═══════════════════════════════════════ -->
+  <section style="background:var(--dark);padding:80px 0;text-align:center;">
+    <div class="container-sm">
+      <p class="caps" style="color:var(--gold);margin-bottom:16px;">The Glassico Edit</p>
+      <h2 style="color:#fff;font-size:clamp(28px,4vw,44px);margin-bottom:20px;">
+        Every frame tells a story.<br>What's yours?
+      </h2>
+      <p style="color:rgba(255,255,255,0.55);font-size:15px;max-width:480px;margin:0 auto 36px;line-height:1.75;">
+        Our editors travel the world to source frames that carry a narrative.
+        From Florentine workshops to Tokyo ateliers — craft you can feel.
+      </p>
+      <a href="shop.html" class="btn-gold">DISCOVER THE COLLECTION</a>
+    </div>
+  </section>
+
+  <!-- main.js injects footer -->
+
+  <script src="js/cart.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // Load featured products (badge = 'new' OR 'bestseller', sorted by newest)
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const res  = await fetch('api/products.php?action=list&sort=newest&limit=4');
+        const json = await res.json();
+        if (!json.success) return;
+
+        const grid = document.getElementById('featured-grid');
+        if (!grid) return;
+
+        json.data.products.forEach(p => {
+          const imgSrc = p.image_url || 'images/placeholder.svg';
+          let badgeHtml = '';
+          if (p.badge === 'bestseller') badgeHtml = `<div class="product-card__badge"><span class="badge badge-gold">Bestseller</span></div>`;
+          else if (p.badge === 'new')   badgeHtml = `<div class="product-card__badge"><span class="badge badge-dark">New</span></div>`;
+
+          const card = document.createElement('div');
+          card.className = 'product-card';
+          card.innerHTML = `
+            <div class="product-card__image-wrap">
+              <img src="${imgSrc}" alt="${p.name}" loading="lazy">
+              <div class="product-card__quick-add">+ QUICK ADD</div>
+            </div>
+            <div class="product-card__body">
+              ${badgeHtml}
+              <div class="product-card__name">${p.name}</div>
+              <div class="product-card__brand">${p.brand || ''}</div>
+              <div class="product-card__price">$${parseFloat(p.price).toFixed(2)}</div>
+            </div>`;
+
+          card.addEventListener('click', (e) => {
+            if (e.target.closest('.product-card__quick-add')) {
+              if (window.Cart) window.Cart.addItem(p, 1);
+              return;
+            }
+            window.location.href = `product.html?id=${p.id}`;
+          });
+
+          grid.appendChild(card);
+        });
+      } catch {}
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+  <rect width="400" height="300" fill="#E8E6E1"/>
+  <!-- Eyeglasses icon -->
+  <g transform="translate(200,150)" fill="none" stroke="#B8922A" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Left lens -->
+    <circle cx="-46" cy="0" r="34"/>
+    <!-- Right lens -->
+    <circle cx="46" cy="0" r="34"/>
+    <!-- Bridge -->
+    <path d="M-12,0 Q0,-10 12,0"/>
+    <!-- Left temple -->
+    <path d="M-80,0 L-106,-6"/>
+    <!-- Right temple -->
+    <path d="M80,0 L106,-6"/>
+    <!-- Nose pad left -->
+    <path d="M-30,-8 Q-26,-14 -22,-8"/>
+    <!-- Nose pad right -->
+    <path d="M22,-8 Q26,-14 30,-8"/>
+  </g>
+  <!-- Label text -->
+  <text x="200" y="240" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#B8922A" letter-spacing="3" font-style="italic">Glassico</text>
+</svg>

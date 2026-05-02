@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Bag — Glassico</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- main.js injects announcement bar + navbar -->
+
+  <div class="container" style="padding-top:40px;padding-bottom:80px;">
+
+    <!-- Breadcrumb -->
+    <nav class="cart-breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html">HOME</a> /
+      <span>YOUR BAG</span>
+    </nav>
+
+    <!-- ═══════════════════════════════════════
+         CART LAYOUT
+    ═══════════════════════════════════════ -->
+    <div id="cart-content">
+
+      <!-- Empty state -->
+      <div class="cart-empty" id="cart-empty" style="display:none;">
+        <div class="cart-empty__icon">🛍</div>
+        <h2 class="cart-empty__title">Your bag is empty</h2>
+        <p class="cart-empty__sub">You haven't added any frames yet.</p>
+        <a href="shop.html" class="btn-dark">BROWSE THE COLLECTION</a>
+      </div>
+
+      <!-- Cart with items -->
+      <div id="cart-has-items">
+        <div class="cart-layout">
+
+          <!-- Left: items -->
+          <div>
+            <h1 class="cart-title">Your Selection</h1>
+            <div id="cart-items-list">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- Right: summary -->
+          <div class="cart-summary" id="cart-summary">
+            <div class="cart-summary__title">Summary</div>
+
+            <div class="cart-summary__row">
+              <span>Subtotal</span>
+              <span id="summary-subtotal">—</span>
+            </div>
+            <div class="cart-summary__row">
+              <span>Boutique Shipping</span>
+              <span id="summary-shipping">—</span>
+            </div>
+            <div class="cart-summary__row">
+              <span>Estimated Tax (8%)</span>
+              <span id="summary-tax">—</span>
+            </div>
+            <div class="cart-summary__row total">
+              <span>TOTAL</span>
+              <span id="summary-total">—</span>
+            </div>
+
+            <a href="checkout.html" class="btn-dark btn-full" style="display:flex;margin-top:20px;" id="btn-checkout">
+              PROCEED TO CHECKOUT →
+            </a>
+
+            <p class="cart-summary__secure">🔒 SECURE EDITORIAL CHECKOUT ENABLED</p>
+
+            <div class="cart-curation">
+              <div class="cart-curation__title">✦ Curation Service</div>
+              <div class="cart-curation__desc">
+                Our stylists will review your selection and reach out with personalised recommendations.
+                Complimentary with every purchase over $400.
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Complete the Wardrobe -->
+        <section class="wardrobe-section">
+          <h2>Complete the Wardrobe</h2>
+          <div class="wardrobe-grid">
+            <div class="wardrobe-card">
+              <div class="wardrobe-card__img">🕶</div>
+              <div>
+                <div class="wardrobe-card__name">The Leather Case</div>
+                <div class="product-card__brand" style="margin-bottom:6px;">Glassico Essentials</div>
+                <div class="wardrobe-card__price">$85.00</div>
+              </div>
+            </div>
+            <div class="wardrobe-card">
+              <div class="wardrobe-card__img">⛓</div>
+              <div>
+                <div class="wardrobe-card__name">Gold Chain Strap</div>
+                <div class="product-card__brand" style="margin-bottom:6px;">Glassico Essentials</div>
+                <div class="wardrobe-card__price">$45.00</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- main.js injects footer -->
+
+  <script src="js/cart.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    function escHtml(str) {
+      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function renderCart() {
+      const cart     = window.Cart.getCart();
+      const emptyEl  = document.getElementById('cart-empty');
+      const hasItems = document.getElementById('cart-has-items');
+      const listEl   = document.getElementById('cart-items-list');
+
+      if (cart.length === 0) {
+        emptyEl.style.display  = 'block';
+        hasItems.style.display = 'none';
+        return;
+      }
+
+      emptyEl.style.display  = 'none';
+      hasItems.style.display = 'block';
+
+      listEl.innerHTML = cart.map(item => {
+        const img      = item.image_url || 'images/placeholder.svg';
+        const itemTotal = (item.price * item.qty).toFixed(2);
+        return `
+          <div class="cart-item" data-id="${item.id}">
+            <div class="cart-item__img">
+              <img src="${img}" alt="${escHtml(item.name)}">
+            </div>
+            <div>
+              <div class="cart-item__name">${escHtml(item.name)}</div>
+              <div class="cart-item__variant">${escHtml(item.brand || '')}${item.subtitle ? ' — ' + escHtml(item.subtitle) : ''}</div>
+              <div class="cart-item__price">$${itemTotal}</div>
+              <div class="qty-control">
+                <button class="qty-btn-minus" data-id="${item.id}" aria-label="Decrease quantity">−</button>
+                <input type="number" value="${item.qty}" min="1" max="99" data-id="${item.id}" class="qty-input" aria-label="Quantity">
+                <button class="qty-btn-plus"  data-id="${item.id}" aria-label="Increase quantity">+</button>
+              </div>
+            </div>
+            <div class="cart-item__actions">
+              <button class="cart-item__remove" data-id="${item.id}">× REMOVE</button>
+            </div>
+          </div>`;
+      }).join('');
+
+      // Bind controls
+      listEl.querySelectorAll('.qty-btn-minus').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id   = parseInt(btn.dataset.id);
+          const item = window.Cart.getCart().find(i => i.id === id);
+          if (item && item.qty > 1) { window.Cart.updateQty(id, item.qty - 1); renderCart(); }
+          else if (item) { window.Cart.removeItem(id); renderCart(); }
+        });
+      });
+
+      listEl.querySelectorAll('.qty-btn-plus').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id   = parseInt(btn.dataset.id);
+          const item = window.Cart.getCart().find(i => i.id === id);
+          if (item) { window.Cart.updateQty(id, item.qty + 1); renderCart(); }
+        });
+      });
+
+      listEl.querySelectorAll('.qty-input').forEach(input => {
+        input.addEventListener('change', () => {
+          const id  = parseInt(input.dataset.id);
+          const qty = Math.max(1, parseInt(input.value) || 1);
+          window.Cart.updateQty(id, qty);
+          renderCart();
+        });
+      });
+
+      listEl.querySelectorAll('.cart-item__remove').forEach(btn => {
+        btn.addEventListener('click', () => {
+          window.Cart.removeItem(parseInt(btn.dataset.id));
+          renderCart();
+        });
+      });
+
+      updateSummary(cart);
+    }
+
+    function updateSummary(cart) {
+      const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+      const shipping = subtotal >= 200 ? 0 : 15;
+      const tax      = subtotal * 0.08;
+      const total    = subtotal + shipping + tax;
+
+      document.getElementById('summary-subtotal').textContent = '$' + subtotal.toFixed(2);
+      document.getElementById('summary-shipping').textContent = shipping === 0 ? 'Complimentary' : '$' + shipping.toFixed(2);
+      document.getElementById('summary-tax').textContent      = '$' + tax.toFixed(2);
+      document.getElementById('summary-total').textContent    = '$' + total.toFixed(2);
+    }
+
+    document.addEventListener('DOMContentLoaded', renderCart);
+  </script>
+</body>
+</html>

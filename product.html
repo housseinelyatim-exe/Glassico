@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product — Glassico</title>
+  <meta name="description" content="View product details and add to your bag.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- main.js injects announcement bar + navbar -->
+
+  <!-- Breadcrumb -->
+  <div style="background:var(--surface);border-bottom:1px solid var(--border);padding:14px 0;">
+    <div class="container">
+      <nav class="cart-breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Home</a> /
+        <a href="shop.html">Shop</a> /
+        <span id="breadcrumb-name" style="color:var(--dark);">Loading…</span>
+      </nav>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       PRODUCT DETAIL
+  ═══════════════════════════════════════ -->
+  <div class="container" id="product-detail-container">
+    <div class="product-detail">
+
+      <!-- ── LEFT: Gallery ─────────────────── -->
+      <div class="product-detail__gallery">
+        <div class="gallery__main">
+          <img id="gallery-main-img" src="images/placeholder.svg" alt="Product" width="600" height="600">
+        </div>
+        <div class="gallery__thumbs">
+          <div class="gallery__thumb active">
+            <img src="images/placeholder.svg" alt="Thumbnail 1">
+          </div>
+          <div class="gallery__thumb">
+            <img src="images/placeholder.svg" alt="Thumbnail 2">
+          </div>
+        </div>
+      </div>
+
+      <!-- ── RIGHT: Info ────────────────────── -->
+      <div class="product-detail__info">
+
+        <div class="product-detail__badge" id="product-badge"></div>
+
+        <h1 class="product-detail__name" id="product-name">Loading…</h1>
+        <div class="product-detail__subtitle" id="product-subtitle"></div>
+        <div class="product-detail__price" id="product-price"></div>
+
+        <div id="product-stock" style="margin-bottom:20px;"></div>
+
+        <p class="product-detail__desc" id="product-desc"></p>
+
+        <div class="product-detail__actions">
+          <button class="btn-gold btn-full" id="btn-add-to-cart" style="flex:1;">ADD TO CART</button>
+          <button class="btn-icon" id="btn-wishlist" title="Add to Wishlist" aria-label="Wishlist">♡</button>
+        </div>
+
+        <a class="product-detail__tryon" href="#">
+          👓 VIRTUAL TRY-ON →
+        </a>
+
+        <!-- Specs table -->
+        <table class="specs-table">
+          <tbody>
+            <tr>
+              <td>Brand</td>
+              <td id="spec-brand">—</td>
+            </tr>
+            <tr>
+              <td>Measurements</td>
+              <td id="spec-measurements">—</td>
+            </tr>
+            <tr>
+              <td>Material</td>
+              <td id="spec-material">—</td>
+            </tr>
+            <tr>
+              <td>Color</td>
+              <td id="spec-color">—</td>
+            </tr>
+            <tr>
+              <td>Gender</td>
+              <td id="spec-gender">—</td>
+            </tr>
+            <tr>
+              <td>SKU</td>
+              <td id="spec-sku">—</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       YOU MAY ALSO LIKE
+  ═══════════════════════════════════════ -->
+  <section style="padding:60px 0 80px;background:var(--bg);">
+    <div class="container">
+      <h2 style="margin-bottom:32px;">You May Also Like</h2>
+      <div class="products-grid" id="related-grid">
+        <!-- Populated dynamically -->
+      </div>
+    </div>
+  </section>
+
+  <!-- main.js injects footer -->
+
+  <script src="js/cart.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/product.js"></script>
+  <script>
+    // Sync breadcrumb name after product loads
+    const nameEl = document.getElementById('product-name');
+    const observer = new MutationObserver(() => {
+      const breadcrumb = document.getElementById('breadcrumb-name');
+      if (breadcrumb && nameEl.textContent && nameEl.textContent !== 'Loading…') {
+        breadcrumb.textContent = nameEl.textContent;
+        observer.disconnect();
+      }
+    });
+    if (nameEl) observer.observe(nameEl, { childList: true, characterData: true, subtree: true });
+
+    // Load related products
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const res  = await fetch('api/products.php?action=list&sort=newest&limit=4');
+        const json = await res.json();
+        if (!json.success) return;
+        const grid = document.getElementById('related-grid');
+        const currentId = parseInt(new URLSearchParams(window.location.search).get('id'));
+        const products  = json.data.products.filter(p => p.id !== currentId).slice(0, 4);
+
+        products.forEach(p => {
+          const img  = p.image_url || 'images/placeholder.svg';
+          let badge  = '';
+          if (p.badge === 'bestseller') badge = `<span class="badge badge-gold">Bestseller</span>`;
+          else if (p.badge === 'new')   badge = `<span class="badge badge-dark">New</span>`;
+
+          const card = document.createElement('div');
+          card.className = 'product-card';
+          card.innerHTML = `
+            <div class="product-card__image-wrap">
+              <img src="${img}" alt="${p.name}" loading="lazy">
+              <div class="product-card__quick-add">+ QUICK ADD</div>
+            </div>
+            <div class="product-card__body">
+              ${badge ? `<div class="product-card__badge">${badge}</div>` : ''}
+              <div class="product-card__name">${p.name}</div>
+              <div class="product-card__brand">${p.brand || ''}</div>
+              <div class="product-card__price">$${parseFloat(p.price).toFixed(2)}</div>
+            </div>`;
+          card.addEventListener('click', (e) => {
+            if (e.target.closest('.product-card__quick-add')) {
+              if (window.Cart) window.Cart.addItem(p, 1);
+              return;
+            }
+            window.location.href = `product.html?id=${p.id}`;
+          });
+          grid.appendChild(card);
+        });
+      } catch {}
+    });
+  </script>
+</body>
+</html>

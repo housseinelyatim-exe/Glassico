@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout — Glassico</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- main.js injects announcement bar + navbar -->
+
+  <!-- Order Confirmation (hidden until success) -->
+  <div class="container" id="order-confirmation" style="display:none;text-align:center;padding:80px 0;">
+    <div style="font-size:56px;margin-bottom:16px;">✅</div>
+    <h1 style="font-family:'Playfair Display',serif;font-size:36px;margin-bottom:12px;">Order Confirmed</h1>
+    <p style="color:var(--muted);margin-bottom:8px;">Thank you for your purchase. Your order has been placed successfully.</p>
+    <p style="font-size:22px;font-weight:700;color:var(--gold);margin-bottom:8px;">Order <span id="confirmation-order-id"></span></p>
+    <p style="color:var(--muted);margin-bottom:36px;">Total: <strong id="confirmation-total"></strong></p>
+    <a href="shop.html" class="btn-dark">CONTINUE SHOPPING</a>
+  </div>
+
+  <!-- Checkout Layout -->
+  <div class="container" id="checkout-form-wrapper" style="padding-top:40px;padding-bottom:80px;">
+    <h1 style="font-family:'Playfair Display',serif;font-size:clamp(28px,3.5vw,40px);margin-bottom:32px;">Checkout</h1>
+    <p class="field-error" id="checkout-global-error" style="font-size:14px;margin-bottom:16px;"></p>
+
+    <form id="checkout-form" novalidate>
+      <div class="checkout-layout">
+
+        <!-- ── LEFT COLUMN ─────────────────────── -->
+        <div>
+
+          <!-- 1. Your Selection -->
+          <div class="checkout-section">
+            <div class="checkout-section__title">
+              <span>1</span> Your Selection
+            </div>
+            <div id="checkout-cart-items">
+              <!-- Populated by checkout.js -->
+            </div>
+          </div>
+
+          <!-- 2. Shipping Address -->
+          <div class="checkout-section">
+            <div class="checkout-section__title">
+              <span>2</span> Shipping Address
+            </div>
+
+            <div class="form-group">
+              <label for="field-email">Email Address</label>
+              <input type="email" id="field-email" placeholder="your@email.com" autocomplete="email">
+              <span class="field-error" id="field-email-error"></span>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="field-first">First Name</label>
+                <input type="text" id="field-first" placeholder="First" autocomplete="given-name">
+                <span class="field-error" id="field-first-error"></span>
+              </div>
+              <div class="form-group">
+                <label for="field-last">Last Name</label>
+                <input type="text" id="field-last" placeholder="Last" autocomplete="family-name">
+                <span class="field-error" id="field-last-error"></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="field-street">Street Address</label>
+              <input type="text" id="field-street" placeholder="123 Main Street" autocomplete="address-line1">
+              <span class="field-error" id="field-street-error"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="field-apt">Apartment, Suite, etc. <em style="font-style:normal;color:var(--muted);">(optional)</em></label>
+              <input type="text" id="field-apt" placeholder="Apt 4B" autocomplete="address-line2">
+            </div>
+
+            <div class="form-row" style="grid-template-columns:2fr 1fr 1fr;">
+              <div class="form-group">
+                <label for="field-city">City</label>
+                <input type="text" id="field-city" placeholder="New York" autocomplete="address-level2">
+                <span class="field-error" id="field-city-error"></span>
+              </div>
+              <div class="form-group">
+                <label for="field-state">State</label>
+                <select id="field-state" autocomplete="address-level1">
+                  <option value="">State</option>
+                </select>
+                <span class="field-error" id="field-state-error"></span>
+              </div>
+              <div class="form-group">
+                <label for="field-zip">ZIP</label>
+                <input type="text" id="field-zip" placeholder="10001" autocomplete="postal-code" maxlength="10">
+                <span class="field-error" id="field-zip-error"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Payment -->
+          <div class="checkout-section">
+            <div class="checkout-section__title">
+              <span>3</span> Secure Payment
+            </div>
+
+            <div class="payment-radio">
+              <label class="payment-option selected">
+                <input type="radio" name="payment" value="credit_card" checked> 💳 Credit / Debit
+              </label>
+              <label class="payment-option">
+                <input type="radio" name="payment" value="paypal"> 🅿 PayPal
+              </label>
+            </div>
+
+            <div class="card-fields" id="card-fields">
+              <div class="form-group">
+                <label for="field-card-number">Card Number</label>
+                <input type="text" id="field-card-number" placeholder="1234 5678 9012 3456" maxlength="19" inputmode="numeric" autocomplete="cc-number">
+                <span class="field-error" id="field-card-number-error"></span>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="field-expiry">Expiry</label>
+                  <input type="text" id="field-expiry" placeholder="MM/YY" maxlength="5" inputmode="numeric" autocomplete="cc-exp">
+                  <span class="field-error" id="field-expiry-error"></span>
+                </div>
+                <div class="form-group">
+                  <label for="field-cvv">CVV</label>
+                  <input type="text" id="field-cvv" placeholder="•••" maxlength="4" inputmode="numeric" autocomplete="cc-csc">
+                  <span class="field-error" id="field-cvv-error"></span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="field-card-name">Name on Card</label>
+                <input type="text" id="field-card-name" placeholder="Full name as on card" autocomplete="cc-name">
+                <span class="field-error" id="field-card-name-error"></span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- ── RIGHT: Order Summary ────────────── -->
+        <div id="checkout-right">
+          <div class="order-summary-sticky">
+            <div class="order-summary-sticky__title">Order Summary</div>
+
+            <div id="order-summary-lines">
+              <!-- Populated by checkout.js -->
+            </div>
+
+            <div class="order-line" style="margin-top:12px;">
+              <span>Subtotal</span>
+              <span id="summary-subtotal">—</span>
+            </div>
+            <div class="order-line">
+              <span>Shipping</span>
+              <span id="summary-shipping">—</span>
+            </div>
+            <div class="order-line">
+              <span>Tax (8%)</span>
+              <span id="summary-tax">—</span>
+            </div>
+            <div class="order-line total-line">
+              <span>TOTAL</span>
+              <span id="summary-total">—</span>
+            </div>
+
+            <button type="submit" form="checkout-form" class="btn-gold btn-full" id="btn-place-order" style="margin-top:24px;">
+              PLACE ORDER
+            </button>
+
+            <p style="text-align:center;font-size:11px;color:var(--muted);margin-top:12px;letter-spacing:0.06em;">
+              🔒 Secured with 256-bit SSL encryption
+            </p>
+
+            <div style="display:flex;align-items:center;gap:12px;margin-top:16px;padding-top:16px;border-top:1px solid var(--border);">
+              <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='38' height='24' viewBox='0 0 38 24' fill='none'%3E%3Crect width='38' height='24' rx='4' fill='%23F0F0F0'/%3E%3Ctext x='50%25' y='16' text-anchor='middle' font-size='10' fill='%23555'%3EVISA%3C/text%3E%3C/svg%3E" alt="Visa" style="height:24px;">
+              <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='38' height='24' viewBox='0 0 38 24' fill='none'%3E%3Crect width='38' height='24' rx='4' fill='%23F0F0F0'/%3E%3Ctext x='50%25' y='16' text-anchor='middle' font-size='8' fill='%23555'%3EMCRD%3C/text%3E%3C/svg%3E" alt="Mastercard" style="height:24px;">
+              <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='38' height='24' viewBox='0 0 38 24' fill='none'%3E%3Crect width='38' height='24' rx='4' fill='%23F0F0F0'/%3E%3Ctext x='50%25' y='16' text-anchor='middle' font-size='8' fill='%23555'%3EAmex%3C/text%3E%3C/svg%3E" alt="Amex" style="height:24px;">
+              <span style="font-size:11px;color:var(--muted);">& more</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </form>
+  </div>
+
+  <!-- main.js injects footer -->
+
+  <script src="js/cart.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/checkout.js"></script>
+</body>
+</html>

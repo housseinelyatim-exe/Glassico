@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Console — Glassico</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    /* Override navbar for admin */
+    body { background: var(--bg); }
+    .announcement-bar { display: block; }
+    .navbar { display: none; }
+    .footer { display: none; }
+    html, body { height: 100%; }
+  </style>
+</head>
+<body>
+
+  <!-- Announcement bar injected by main.js but we use a static one here -->
+  <div class="announcement-bar" id="admin-announcement-bar">Glassico Admin Console — Editorial Control Panel</div>
+
+  <div class="admin-wrapper">
+
+    <!-- ═══════════════════════════════════════
+         SIDEBAR
+    ═══════════════════════════════════════ -->
+    <aside class="admin-sidebar">
+      <div class="admin-sidebar__brand">
+        <div class="admin-sidebar__logo">GLASSICO</div>
+        <div class="admin-sidebar__console">Admin Console</div>
+        <div class="admin-sidebar__subtitle">Editorial Control</div>
+      </div>
+
+      <nav class="admin-nav">
+        <div class="admin-nav__item active" data-view="dashboard">
+          <span class="admin-nav__icon">📊</span> DASHBOARD
+        </div>
+        <div class="admin-nav__item" data-view="inventory">
+          <span class="admin-nav__icon">👓</span> INVENTORY
+        </div>
+        <div class="admin-nav__item" data-view="orders">
+          <span class="admin-nav__icon">🛒</span> ORDERS
+        </div>
+        <div class="admin-nav__item" data-view="settings">
+          <span class="admin-nav__icon">⚙</span> SETTINGS
+        </div>
+      </nav>
+
+      <div class="admin-sidebar__footer">
+        <button class="admin-sidebar__logout" id="admin-logout">→ Sign Out</button>
+      </div>
+    </aside>
+
+    <!-- ═══════════════════════════════════════
+         MAIN CONTENT
+    ═══════════════════════════════════════ -->
+    <main class="admin-main">
+
+      <!-- Header -->
+      <div class="admin-main__header">
+        <div>
+          <div class="admin-main__title" id="admin-view-title">Overview</div>
+          <div class="admin-main__subtitle">Glassico performance at a glance</div>
+        </div>
+        <button class="btn-dark btn-sm" id="btn-new-item">+ NEW ITEM</button>
+      </div>
+
+      <div class="admin-content">
+
+        <!-- ─── DASHBOARD VIEW ─────────────────── -->
+        <div class="admin-view active" id="view-dashboard">
+
+          <!-- Stats row -->
+          <div class="stats-row">
+            <div class="stat-card">
+              <div class="stat-card__label">Total Sales MTD</div>
+              <div class="stat-card__value" id="stat-sales">—</div>
+              <div class="stat-card__change">Month to date</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card__label">Active Orders</div>
+              <div class="stat-card__value" id="stat-orders">—</div>
+              <div class="stat-card__change">Pending + Processing</div>
+            </div>
+            <div class="stat-card stat-card--alert">
+              <div class="stat-card__label">Low Stock Alerts</div>
+              <div class="stat-card__value" id="stat-stock">—</div>
+              <div class="stat-card__change">Under 5 units</div>
+            </div>
+          </div>
+
+          <!-- Two column: inventory table + editorial panel -->
+          <div class="admin-two-col">
+
+            <!-- Left: inventory table -->
+            <div class="admin-panel">
+              <div class="admin-panel__header">
+                <div class="admin-panel__title">Curated Inventory</div>
+                <input type="text" id="inventory-search" class="admin-search" placeholder="Search products…" aria-label="Search inventory">
+              </div>
+
+              <div class="admin-table-wrap">
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>ITEM</th>
+                      <th>SKU</th>
+                      <th>STOCK</th>
+                      <th>STATUS</th>
+                      <th>ACTIONS</th>
+                    </tr>
+                  </thead>
+                  <tbody id="inventory-tbody">
+                    <tr><td colspan="5" style="text-align:center;padding:24px;color:var(--muted);">Loading…</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="admin-pagination">
+                <span id="inventory-pagination-info"></span>
+                <div class="admin-pagination__btns">
+                  <button id="inventory-prev" disabled>← Prev</button>
+                  <button id="inventory-next">Next →</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: editorial announcement -->
+            <div>
+              <div class="announcement-card">
+                <div class="announcement-card__title">Editorial Announcement</div>
+                <textarea id="banner-text" placeholder="Enter banner copy, e.g. 'New arrivals — Shop the Autumn Edit now.'" rows="3"></textarea>
+                <div class="announcement-card__controls">
+                  <label class="announcement-card__check">
+                    <input type="checkbox" id="banner-enable"> Enable Banner
+                  </label>
+                  <button class="btn-gold btn-sm" id="banner-publish">PUBLISH</button>
+                </div>
+
+                <div class="pending-section">
+                  <div class="pending-section__title">Pending Review</div>
+                  <div class="pending-item">
+                    <span>Autumn Collection Copy</span>
+                    <span class="pending-item__arrow">→</span>
+                  </div>
+                  <div class="pending-item">
+                    <span>Holiday Gift Guide</span>
+                    <span class="pending-item__arrow">→</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Recent orders -->
+              <div class="admin-panel" style="margin-top:20px;">
+                <div class="admin-panel__header">
+                  <div class="admin-panel__title">Recent Orders</div>
+                </div>
+                <div class="admin-table-wrap">
+                  <table class="admin-table">
+                    <thead>
+                      <tr><th>ORDER</th><th>CUSTOMER</th><th>TOTAL</th><th>STATUS</th></tr>
+                    </thead>
+                    <tbody id="recent-orders-tbody">
+                      <tr><td colspan="4" style="text-align:center;padding:16px;color:var(--muted);">Loading…</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ─── INVENTORY VIEW ─────────────────── -->
+        <div class="admin-view" id="view-inventory">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+            <h2 style="font-family:'Playfair Display',serif;">All Products</h2>
+            <button class="btn-dark btn-sm" id="btn-new-item-inventory">+ ADD PRODUCT</button>
+          </div>
+
+          <div class="admin-panel">
+            <div class="admin-panel__header">
+              <div class="admin-panel__title">Product Catalogue</div>
+              <input type="text" id="inventory-search-full" class="admin-search" placeholder="Search…" aria-label="Search">
+            </div>
+            <div class="admin-table-wrap">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>ITEM</th>
+                    <th>SKU</th>
+                    <th>PRICE</th>
+                    <th>STOCK</th>
+                    <th>STATUS</th>
+                    <th>ACTIONS</th>
+                  </tr>
+                </thead>
+                <tbody id="inventory-tbody-full">
+                  <!-- Same data, loaded when view activates -->
+                </tbody>
+              </table>
+            </div>
+            <div class="admin-pagination">
+              <span id="inventory-pagination-info-full"></span>
+              <div class="admin-pagination__btns">
+                <button id="inventory-prev-full" disabled>← Prev</button>
+                <button id="inventory-next-full">Next →</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ─── ORDERS VIEW ────────────────────── -->
+        <div class="admin-view" id="view-orders">
+          <div style="margin-bottom:24px;">
+            <h2 style="font-family:'Playfair Display',serif;">All Orders</h2>
+          </div>
+
+          <div class="admin-panel">
+            <div class="admin-panel__header">
+              <div class="admin-panel__title">Order Management</div>
+            </div>
+            <div class="admin-table-wrap">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>ORDER</th>
+                    <th>CUSTOMER</th>
+                    <th>DATE</th>
+                    <th>TOTAL</th>
+                    <th>STATUS</th>
+                  </tr>
+                </thead>
+                <tbody id="orders-tbody">
+                  <tr><td colspan="5" style="text-align:center;padding:24px;color:var(--muted);">Loading…</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="admin-pagination">
+              <span id="orders-pagination-info"></span>
+              <div class="admin-pagination__btns">
+                <button id="orders-prev" disabled>← Prev</button>
+                <button id="orders-next">Next →</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ─── SETTINGS VIEW ─────────────────── -->
+        <div class="admin-view" id="view-settings">
+          <h2 style="font-family:'Playfair Display',serif;margin-bottom:24px;">Settings</h2>
+          <div class="admin-panel" style="padding:28px;">
+            <p style="color:var(--muted);font-size:14px;">Settings panel — configure store options, notifications, and integrations.</p>
+            <div style="margin-top:24px;">
+              <div class="form-group">
+                <label>Store Name</label>
+                <input type="text" value="Glassico">
+              </div>
+              <div class="form-group">
+                <label>Support Email</label>
+                <input type="email" placeholder="support@glassico.com">
+              </div>
+              <div class="form-group">
+                <label>Free Shipping Threshold ($)</label>
+                <input type="number" value="200">
+              </div>
+              <div class="form-group">
+                <label>Tax Rate (%)</label>
+                <input type="number" value="8">
+              </div>
+              <button class="btn-gold" type="button" style="margin-top:8px;">SAVE SETTINGS</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       ADD / EDIT PRODUCT MODAL
+  ═══════════════════════════════════════ -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal" id="product-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <button class="modal__close" id="modal-close" aria-label="Close modal">×</button>
+      <div class="modal__title" id="modal-title">Add New Product</div>
+
+      <form id="product-form" novalidate>
+        <input type="hidden" id="modal-image-url">
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="modal-name">Name *</label>
+            <input type="text" id="modal-name" placeholder="The Architect" required>
+          </div>
+          <div class="form-group">
+            <label for="modal-brand">Brand</label>
+            <input type="text" id="modal-brand" placeholder="Oliver Peoples">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="modal-subtitle">Subtitle</label>
+            <input type="text" id="modal-subtitle" placeholder="Havana Tortoise">
+          </div>
+          <div class="form-group">
+            <label for="modal-sku">SKU</label>
+            <input type="text" id="modal-sku" placeholder="OP-ARCH-HT-001">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="modal-price">Price ($) *</label>
+            <input type="number" id="modal-price" placeholder="345.00" step="0.01" min="0" required>
+          </div>
+          <div class="form-group">
+            <label for="modal-stock">Stock</label>
+            <input type="number" id="modal-stock" placeholder="0" min="0">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="modal-gender">Gender</label>
+            <select id="modal-gender">
+              <option value="">Select…</option>
+              <option value="men">Men</option>
+              <option value="women">Women</option>
+              <option value="kids">Kids</option>
+              <option value="unisex">Unisex</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="modal-frame-shape">Frame Shape</label>
+            <select id="modal-frame-shape">
+              <option value="">Select…</option>
+              <option value="round">Round</option>
+              <option value="square">Square</option>
+              <option value="aviator">Aviator</option>
+              <option value="cat_eye">Cat Eye</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="modal-color">Color</label>
+            <input type="text" id="modal-color" placeholder="Havana">
+          </div>
+          <div class="form-group">
+            <label for="modal-badge">Badge</label>
+            <select id="modal-badge">
+              <option value="">None</option>
+              <option value="new">New</option>
+              <option value="bestseller">Bestseller</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="modal-material">Material</label>
+            <input type="text" id="modal-material" placeholder="Italian acetate">
+          </div>
+          <div class="form-group">
+            <label for="modal-measurements">Measurements</label>
+            <input type="text" id="modal-measurements" placeholder="52-20-145">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="modal-description">Description</label>
+          <textarea id="modal-description" rows="3" placeholder="Product description…"></textarea>
+        </div>
+
+        <!-- Image upload -->
+        <div class="form-group">
+          <label>Product Image</label>
+          <div style="display:flex;gap:16px;align-items:flex-start;">
+            <img id="modal-image-preview" src="images/placeholder.svg" alt="Preview"
+              style="width:80px;height:80px;object-fit:contain;border:1px solid var(--border);border-radius:6px;background:#E8E6E1;">
+            <div style="flex:1;">
+              <input type="file" id="modal-image-file" accept="image/jpeg,image/png,image/webp" style="font-size:13px;">
+              <span style="display:block;font-size:11px;color:var(--muted);margin-top:4px;" id="modal-image-status"></span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-top:8px;">
+          <button type="submit" class="btn-gold" style="flex:1;">SAVE PRODUCT</button>
+          <button type="button" class="btn-outline" id="modal-cancel" style="flex:1;" onclick="document.getElementById('modal-overlay').classList.remove('open')">CANCEL</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <script src="js/cart.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
