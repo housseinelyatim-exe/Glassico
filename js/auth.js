@@ -36,6 +36,10 @@
     document.querySelectorAll('input.error').forEach(el => el.classList.remove('error'));
   }
 
+  function redirectAfterAuth(isAdmin) {
+    window.location.href = isAdmin ? 'admin.html' : 'index.html';
+  }
+
   // ── Login ─────────────────────────────────────────────────────
   function bindLogin() {
     const form = document.getElementById('login-form');
@@ -72,13 +76,7 @@
 
         if (!json.success) throw new Error(json.error || 'Login failed.');
 
-        // Redirect
-        if (json.data?.is_admin) {
-          window.location.href = 'admin.html';
-        } else {
-          const redirect = new URLSearchParams(window.location.search).get('redirect');
-          window.location.href = redirect || 'index.html';
-        }
+        redirectAfterAuth(!!json.data?.is_admin);
       } catch (err) {
         const globalErr = document.getElementById('login-global-error');
         if (globalErr) globalErr.textContent = err.message;
@@ -133,8 +131,7 @@
 
         if (!json.success) throw new Error(json.error || 'Registration failed.');
 
-        const redirect = new URLSearchParams(window.location.search).get('redirect');
-        window.location.href = redirect || 'index.html';
+        redirectAfterAuth(false);
 
       } catch (err) {
         const globalErr = document.getElementById('signup-global-error');
@@ -144,18 +141,13 @@
     });
   }
 
-  // ── Session check: if already logged in, redirect ─────────────
+  // ── Session check: keep auth page available for customers ─────
   async function checkSession() {
     try {
       const res  = await fetch('api/auth.php?action=session');
       const json = await res.json();
-      if (json.success && json.data?.logged_in) {
-        if (json.data.is_admin) {
-          window.location.href = 'admin.html';
-        } else {
-          const redirect = new URLSearchParams(window.location.search).get('redirect');
-          if (redirect) window.location.href = redirect;
-        }
+      if (json.success && json.data?.logged_in && json.data?.is_admin) {
+        redirectAfterAuth(true);
       }
     } catch {}
   }

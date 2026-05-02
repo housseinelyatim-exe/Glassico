@@ -15,7 +15,17 @@ $action = $_GET['action'] ?? '';
 
 // ── GET: session check ────────────────────────────────────────
 if ($method === 'GET' && $action === 'session') {
-    if (is_logged_in()) {
+    if (is_admin()) {
+        echo json_encode([
+            'success' => true,
+            'data'    => [
+                'logged_in' => true,
+                'is_admin'  => true,
+                'admin_id'  => current_admin_id(),
+            ],
+            'error' => '',
+        ]);
+    } elseif (is_logged_in()) {
         try {
             $pdo  = db();
             $stmt = $pdo->prepare(
@@ -44,16 +54,6 @@ if ($method === 'GET' && $action === 'session') {
             http_response_code(500);
             echo json_encode(['success' => false, 'data' => null, 'error' => $e->getMessage()]);
         }
-    } elseif (is_admin()) {
-        echo json_encode([
-            'success' => true,
-            'data'    => [
-                'logged_in' => true,
-                'is_admin'  => true,
-                'admin_id'  => current_admin_id(),
-            ],
-            'error' => '',
-        ]);
     } else {
         echo json_encode([
             'success' => true,

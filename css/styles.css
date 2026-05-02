@@ -1060,22 +1060,6 @@ textarea { resize: vertical; min-height: 100px; }
   margin-bottom: 20px;
 }
 .product-detail__actions .btn-gold { flex: 1; }
-.product-detail__tryon {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--muted);
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 32px;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  cursor: pointer;
-  transition: color 0.2s;
-}
-.product-detail__tryon:hover { color: var(--gold); }
 .specs-table {
   width: 100%;
   border-collapse: collapse;

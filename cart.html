@@ -58,10 +58,6 @@
               <span>Boutique Shipping</span>
               <span id="summary-shipping">—</span>
             </div>
-            <div class="cart-summary__row">
-              <span>Estimated Tax (8%)</span>
-              <span id="summary-tax">—</span>
-            </div>
             <div class="cart-summary__row total">
               <span>TOTAL</span>
               <span id="summary-total">—</span>
@@ -200,12 +196,10 @@
     function updateSummary(cart) {
       const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
       const shipping = subtotal >= 200 ? 0 : 15;
-      const tax      = subtotal * 0.08;
-      const total    = subtotal + shipping + tax;
+      const total    = subtotal + shipping;
 
       document.getElementById('summary-subtotal').textContent = '$' + subtotal.toFixed(2);
       document.getElementById('summary-shipping').textContent = shipping === 0 ? 'Complimentary' : '$' + shipping.toFixed(2);
-      document.getElementById('summary-tax').textContent      = '$' + tax.toFixed(2);
       document.getElementById('summary-total').textContent    = '$' + total.toFixed(2);
     }
 

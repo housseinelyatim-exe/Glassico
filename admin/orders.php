@@ -50,20 +50,7 @@ if ($method === 'GET') {
                     o.created_at,
                     o.shipping_address,
                     COALESCE(c.email, o.guest_email)                    AS customer_email,
-                    COALESCE(CONCAT(c.first_name,' ',c.last_name), 'Guest') AS customer_name,
-                    (SELECT JSON_ARRAYAGG(
-                         JSON_OBJECT(
-                             'product_id', oi.product_id,
-                             'quantity',   oi.quantity,
-                             'unit_price', oi.unit_price,
-                             'name',       p.name,
-                             'sku',        p.sku
-                         )
-                     )
-                     FROM order_items oi
-                     LEFT JOIN products p ON p.id = oi.product_id
-                     WHERE oi.order_id = o.id
-                    ) AS items
+                    COALESCE(CONCAT(c.first_name,' ',c.last_name), 'Guest') AS customer_name
              FROM orders o
              LEFT JOIN customers c ON c.id = o.customer_id
              WHERE {$whereSQL}
@@ -74,7 +61,6 @@ if ($method === 'GET') {
         $orders = $dataStmt->fetchAll();
 
         foreach ($orders as &$order) {
-            $order['items']            = json_decode($order['items']            ?? '[]', true) ?? [];
             $order['shipping_address'] = json_decode($order['shipping_address'] ?? '{}', true) ?? [];
         }
         unset($order);

@@ -1,10 +1,10 @@
 <?php
 // =============================================================
 //  Glassico — Admin Products CRUD
-//  GET    → paginated list (all including inactive)
+//  GET    → paginated list (active by default)
 //  POST   → create product
 //  PATCH  ?id=N → update product / stock
-//  DELETE ?id=N → soft-delete
+//  DELETE ?id=N → hard-delete
 // =============================================================
 
 require_once '../includes/cors.php';
@@ -16,14 +16,20 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 // ── GET: product list ─────────────────────────────────────────
 if ($method === 'GET') {
-    $page     = max(1, (int) ($_GET['page']  ?? 1));
-    $limit    = min(50, max(1, (int) ($_GET['limit'] ?? PRODUCTS_PER_PAGE)));
-    $offset   = ($page - 1) * $limit;
-    $search   = trim($_GET['search'] ?? '');
-    $status   = $_GET['status'] ?? ''; // 'active' | 'inactive' | ''
+    $page   = max(1, (int) ($_GET['page'] ?? 1));
+    $limit  = min(50, max(1, (int) ($_GET['limit'] ?? PRODUCTS_PER_PAGE)));
+    $offset = ($page - 1) * $limit;
+    $search = trim($_GET['search'] ?? '');
+    $status = $_GET['status'] ?? ''; // 'active' | 'inactive' | 'all' | ''
 
-    $where  = ['1=1'];
+    $where  = ['is_active = 1'];
     $params = [];
+
+    if ($status === 'inactive') {
+        $where = ['is_active = 0'];
+    } elseif ($status === 'all') {
+        $where = ['1=1'];
+    }
 
     if ($search !== '') {
         $where[]  = '(name LIKE ? OR brand LIKE ? OR sku LIKE ?)';
@@ -31,12 +37,6 @@ if ($method === 'GET') {
         $params[] = $like;
         $params[] = $like;
         $params[] = $like;
-    }
-
-    if ($status === 'active') {
-        $where[] = 'is_active = 1';
-    } elseif ($status === 'inactive') {
-        $where[] = 'is_active = 0';
     }
 
     $whereSQL = implode(' AND ', $where);
@@ -101,18 +101,18 @@ if ($method === 'POST') {
         );
         $stmt->execute([
             trim($body['name']),
-            trim($body['brand']        ?? ''),
-            trim($body['subtitle']     ?? ''),
+            trim($body['brand'] ?? ''),
+            trim($body['subtitle'] ?? ''),
             $price,
-            trim($body['description']  ?? ''),
-            trim($body['image_url']    ?? ''),
-            trim($body['sku']          ?? '') ?: null,
+            trim($body['description'] ?? ''),
+            trim($body['image_url'] ?? ''),
+            trim($body['sku'] ?? '') ?: null,
             max(0, (int) ($body['stock'] ?? 0)),
-            $body['gender']      ?? null,
+            $body['gender'] ?? null,
             $body['frame_shape'] ?? null,
-            trim($body['color']        ?? ''),
-            $body['badge']       ?? null,
-            trim($body['material']     ?? ''),
+            trim($body['color'] ?? ''),
+            $body['badge'] ?? null,
+            trim($body['material'] ?? ''),
             trim($body['measurements'] ?? ''),
             isset($body['is_active']) ? (int) $body['is_active'] : 1,
         ]);
@@ -197,7 +197,7 @@ if ($method === 'PATCH') {
     exit;
 }
 
-// ── DELETE: soft-delete ───────────────────────────────────────
+// ── DELETE: hard-delete ───────────────────────────────────────
 if ($method === 'DELETE') {
     $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     if (!$id) {
@@ -208,7 +208,7 @@ if ($method === 'DELETE') {
 
     try {
         $pdo  = db();
-        $stmt = $pdo->prepare('UPDATE products SET is_active = 0 WHERE id = ?');
+        $stmt = $pdo->prepare('DELETE FROM products WHERE id = ?');
         $stmt->execute([$id]);
 
         if ($stmt->rowCount() === 0) {

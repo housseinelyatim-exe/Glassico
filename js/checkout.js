@@ -52,8 +52,7 @@
     // Order Summary totals
     const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
     const shipping = subtotal >= 200 ? 0 : 15;
-    const tax      = subtotal * 0.08;
-    const total    = subtotal + shipping + tax;
+    const total    = subtotal + shipping;
 
     if (summaryContainer) {
       summaryContainer.innerHTML = cart.map(item =>
@@ -63,10 +62,9 @@
 
     setText('summary-subtotal', `$${subtotal.toFixed(2)}`);
     setText('summary-shipping', shipping === 0 ? 'Complimentary' : `$${shipping.toFixed(2)}`);
-    setText('summary-tax',      `$${tax.toFixed(2)}`);
     setText('summary-total',    `$${total.toFixed(2)}`);
 
-    return { subtotal, shipping, tax, total };
+    return { subtotal, shipping, total };
   }
 
   // ── Payment method toggle ─────────────────────────────────────
@@ -81,7 +79,7 @@
         const radio = opt.querySelector('input[type="radio"]');
         if (radio) radio.checked = true;
         if (cardFields) {
-          cardFields.style.display = radio?.value === 'paypal' ? 'none' : 'grid';
+          cardFields.style.display = radio?.value === 'credit_card' ? 'grid' : 'none';
         }
       });
     });
@@ -137,7 +135,7 @@
     if (!stateVal) { setError('field-state', 'Select a state.'); valid = false; }
 
     const selectedPayment = document.querySelector('input[name="payment"]:checked')?.value;
-    if (selectedPayment !== 'paypal') {
+    if (selectedPayment === 'credit_card') {
       const cardNum = document.getElementById('field-card-number')?.value.replace(/\s/g,'');
       if (!cardNum || cardNum.length !== 16) {
         setError('field-card-number', 'Enter a valid 16-digit card number.');
@@ -209,9 +207,11 @@
 
       const confirmation = document.getElementById('order-confirmation');
       if (confirmation) {
+        confirmation.style.display = 'block';
         confirmation.classList.add('show');
         setText('confirmation-order-id', `#${json.data.order_id}`);
         setText('confirmation-total',    `$${parseFloat(json.data.total).toFixed(2)}`);
+        confirmation.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
 
     } catch (err) {

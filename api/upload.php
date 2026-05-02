@@ -62,12 +62,17 @@ if ($file['size'] > $maxBytes) {
     exit;
 }
 
-$folder    = $_POST['folder'] ?? CLOUDINARY_FOLDER_PRODUCTS;
-$secureUrl = upload_to_cloudinary($tmpPath, $folder);
+$folder       = $_POST['folder'] ?? CLOUDINARY_FOLDER_PRODUCTS;
+$cloudErr     = '';
+$secureUrl    = upload_to_cloudinary($tmpPath, $folder, $cloudErr);
 
 if (!$secureUrl) {
     http_response_code(500);
-    echo json_encode(['success' => false, 'data' => null, 'error' => 'Image upload to Cloudinary failed.']);
+    echo json_encode([
+        'success' => false,
+        'data'    => null,
+        'error'   => $cloudErr ?: 'Image upload to Cloudinary failed.',
+    ]);
     exit;
 }
 

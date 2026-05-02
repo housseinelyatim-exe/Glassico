@@ -43,6 +43,7 @@ function login_customer(int $id): void
 {
     start_session();
     session_regenerate_id(true);
+    unset($_SESSION['admin_id']);
     $_SESSION['customer_id'] = $id;
 }
 
@@ -87,6 +88,7 @@ function login_admin(int $id): void
 {
     start_session();
     session_regenerate_id(true);
+    unset($_SESSION['customer_id']);
     $_SESSION['admin_id'] = $id;
 }
 

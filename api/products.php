@@ -5,7 +5,7 @@
 //  GET  ?action=single&id=N → single product
 //  POST   (admin)       → create product
 //  PATCH  (admin)       → update product
-//  DELETE (admin)       → soft-delete (is_active = 0)
+//  DELETE (admin)       → hard-delete product
 // =============================================================
 
 require_once '../includes/cors.php';
@@ -274,7 +274,7 @@ if ($method === 'PATCH') {
     exit;
 }
 
-// ── DELETE: soft-delete (admin only) ─────────────────────────
+// ── DELETE: hard-delete (admin only) ─────────────────────────
 if ($method === 'DELETE') {
     require_admin();
 
@@ -287,7 +287,7 @@ if ($method === 'DELETE') {
 
     try {
         $pdo  = db();
-        $stmt = $pdo->prepare('UPDATE products SET is_active = 0 WHERE id = ?');
+        $stmt = $pdo->prepare('DELETE FROM products WHERE id = ?');
         $stmt->execute([$id]);
 
         if ($stmt->rowCount() === 0) {

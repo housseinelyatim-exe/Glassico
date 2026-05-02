@@ -58,7 +58,9 @@
   // ── Inventory table ───────────────────────────────────────────
   async function loadInventory(page = 1) {
     inventoryPage = page;
-    const search = document.getElementById('inventory-search')?.value.trim() || '';
+    const compactSearch = document.getElementById('inventory-search')?.value.trim() || '';
+    const fullSearch    = document.getElementById('inventory-search-full')?.value.trim() || '';
+    const search        = fullSearch || compactSearch;
 
     try {
       const res  = await fetch(`admin/products.php?page=${page}&limit=10&search=${encodeURIComponent(search)}`);
@@ -66,46 +68,92 @@
       if (!json.success) return;
 
       const { products, total, total_pages } = json.data;
-      const tbody = document.getElementById('inventory-tbody');
-      if (!tbody) return;
+      const tbodyCompact = document.getElementById('inventory-tbody');
+      const tbodyFull    = document.getElementById('inventory-tbody-full');
+      if (!tbodyCompact && !tbodyFull) return;
 
-      if (products.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:32px;color:var(--muted);">No products found.</td></tr>`;
-      } else {
-        tbody.innerHTML = products.map(p => {
-          const stockPill = p.stock <= 0
-            ? `<span class="status-pill out-stock">Out of Stock</span>`
-            : p.stock <= 4
-              ? `<span class="status-pill low-stock">Low Stock</span>`
-              : `<span class="status-pill in-stock">In Stock</span>`;
-          const img = p.image_url || 'images/placeholder.svg';
-          return `
-            <tr>
-              <td>
-                <div class="admin-table__item">
-                  <div class="admin-table__thumb"><img src="${img}" alt="${escHtml(p.name)}"></div>
-                  <div>
-                    <div class="admin-table__name">${escHtml(p.name)}</div>
-                    <div class="admin-table__brand">${escHtml(p.brand || '')}</div>
-                  </div>
+      const compactRows = products.map(p => {
+        const stockPill = p.stock <= 0
+          ? `<span class="status-pill out-stock">Out of Stock</span>`
+          : p.stock <= 4
+            ? `<span class="status-pill low-stock">Low Stock</span>`
+            : `<span class="status-pill in-stock">In Stock</span>`;
+        const img = p.image_url || 'images/placeholder.svg';
+        return `
+          <tr>
+            <td>
+              <div class="admin-table__item">
+                <div class="admin-table__thumb"><img src="${img}" alt="${escHtml(p.name)}"></div>
+                <div>
+                  <div class="admin-table__name">${escHtml(p.name)}</div>
+                  <div class="admin-table__brand">${escHtml(p.brand || '')}</div>
                 </div>
-              </td>
-              <td>${escHtml(p.sku || '—')}</td>
-              <td>${p.stock}</td>
-              <td>${stockPill}</td>
-              <td>
-                <button class="admin-table__action" onclick="window._adminEditProduct(${p.id})" title="Edit">✏️</button>
-                <button class="admin-table__action" onclick="window._adminDeleteProduct(${p.id}, '${escHtml(p.name)}')" title="Delete" style="margin-left:4px;">🗑</button>
-              </td>
-            </tr>`;
-        }).join('');
+              </div>
+            </td>
+            <td>${escHtml(p.sku || '—')}</td>
+            <td>${p.stock}</td>
+            <td>${stockPill}</td>
+            <td>
+              <button class="admin-table__action" onclick="window._adminEditProduct(${p.id})" title="Edit">✏️</button>
+              <button class="admin-table__action" onclick="window._adminDeleteProduct(${p.id}, '${escHtml(p.name)}')" title="Delete" style="margin-left:4px;">🗑</button>
+            </td>
+          </tr>`;
+      }).join('');
+
+      const fullRows = products.map(p => {
+        const stockPill = p.stock <= 0
+          ? `<span class="status-pill out-stock">Out of Stock</span>`
+          : p.stock <= 4
+            ? `<span class="status-pill low-stock">Low Stock</span>`
+            : `<span class="status-pill in-stock">In Stock</span>`;
+        const img = p.image_url || 'images/placeholder.svg';
+        return `
+          <tr>
+            <td>
+              <div class="admin-table__item">
+                <div class="admin-table__thumb"><img src="${img}" alt="${escHtml(p.name)}"></div>
+                <div>
+                  <div class="admin-table__name">${escHtml(p.name)}</div>
+                  <div class="admin-table__brand">${escHtml(p.brand || '')}</div>
+                </div>
+              </div>
+            </td>
+            <td>${escHtml(p.sku || '—')}</td>
+            <td>$${parseFloat(p.price || 0).toFixed(2)}</td>
+            <td>${p.stock}</td>
+            <td>${stockPill}</td>
+            <td>
+              <button class="admin-table__action" onclick="window._adminEditProduct(${p.id})" title="Edit">✏️</button>
+              <button class="admin-table__action" onclick="window._adminDeleteProduct(${p.id}, '${escHtml(p.name)}')" title="Delete" style="margin-left:4px;">🗑</button>
+            </td>
+          </tr>`;
+      }).join('');
+
+      if (tbodyCompact) {
+        tbodyCompact.innerHTML = products.length === 0
+          ? `<tr><td colspan="5" style="text-align:center;padding:32px;color:var(--muted);">No products found.</td></tr>`
+          : compactRows;
       }
 
-      setText('inventory-pagination-info', `Page ${page} of ${total_pages || 1} (${total} items)`);
+      if (tbodyFull) {
+        tbodyFull.innerHTML = products.length === 0
+          ? `<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--muted);">No products found.</td></tr>`
+          : fullRows;
+      }
+
+      const pageText = `Page ${page} of ${total_pages || 1} (${total} items)`;
+      setText('inventory-pagination-info', pageText);
+      setText('inventory-pagination-info-full', pageText);
+      const disablePrev = page <= 1;
+      const disableNext = page >= (total_pages || 1);
       const prevBtn = document.getElementById('inventory-prev');
       const nextBtn = document.getElementById('inventory-next');
-      if (prevBtn) prevBtn.disabled = page <= 1;
-      if (nextBtn) nextBtn.disabled = page >= (total_pages || 1);
+      const prevBtnFull = document.getElementById('inventory-prev-full');
+      const nextBtnFull = document.getElementById('inventory-next-full');
+      if (prevBtn) prevBtn.disabled = disablePrev;
+      if (nextBtn) nextBtn.disabled = disableNext;
+      if (prevBtnFull) prevBtnFull.disabled = disablePrev;
+      if (nextBtnFull) nextBtnFull.disabled = disableNext;
 
     } catch (err) {
       console.error('Inventory load error:', err);
@@ -125,7 +173,7 @@
       if (!tbody) return;
 
       if (orders.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--muted);">No orders yet.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:32px;color:var(--muted);">No orders yet.</td></tr>`;
       } else {
         tbody.innerHTML = orders.map(o => {
           const statusOptions = ['pending','processing','shipped','delivered','cancelled']
@@ -136,7 +184,7 @@
               <td>#${o.id}</td>
               <td>${escHtml(o.customer_email || '—')}</td>
               <td>${formatDate(o.created_at)}</td>
-              <td>$${parseFloat(o.total).toFixed(2)}</td>
+              <td>$${parseFloat(o.total || 0).toFixed(2)}</td>
               <td>
                 <select class="status-select" data-order-id="${o.id}" onchange="window._adminUpdateOrderStatus(${o.id}, this.value)">
                   ${statusOptions}
@@ -229,11 +277,11 @@
 
   // ── Delete product ────────────────────────────────────────────
   window._adminDeleteProduct = async function (id, name) {
-    if (!confirm(`Deactivate "${name}"? It will no longer appear in the shop.`)) return;
+    if (!confirm(`Delete "${name}" permanently? This cannot be undone.`)) return;
     try {
       const res  = await fetch(`admin/products.php?id=${id}`, { method: 'DELETE' });
       const json = await res.json();
-      if (json.success) { showToast('Product deactivated.'); loadInventory(inventoryPage); }
+      if (json.success) { showToast('Product deleted.'); loadInventory(inventoryPage); }
       else showToast('Error: ' + json.error, 'error');
     } catch { showToast('Network error.', 'error'); }
   };
@@ -372,18 +420,25 @@
   // ── Inventory search ──────────────────────────────────────────
   function bindInventorySearch() {
     let t;
-    const input = document.getElementById('inventory-search');
-    if (!input) return;
-    input.addEventListener('input', () => {
-      clearTimeout(t);
-      t = setTimeout(() => { inventoryPage = 1; loadInventory(1); }, 350);
-    });
+    const compact = document.getElementById('inventory-search');
+    const full    = document.getElementById('inventory-search-full');
+    const bind = (input) => {
+      if (!input) return;
+      input.addEventListener('input', () => {
+        clearTimeout(t);
+        t = setTimeout(() => { inventoryPage = 1; loadInventory(1); }, 350);
+      });
+    };
+    bind(compact);
+    bind(full);
   }
 
   // ── Pagination ────────────────────────────────────────────────
   function bindPagination() {
     document.getElementById('inventory-prev')?.addEventListener('click', () => loadInventory(inventoryPage - 1));
     document.getElementById('inventory-next')?.addEventListener('click', () => loadInventory(inventoryPage + 1));
+    document.getElementById('inventory-prev-full')?.addEventListener('click', () => loadInventory(inventoryPage - 1));
+    document.getElementById('inventory-next-full')?.addEventListener('click', () => loadInventory(inventoryPage + 1));
     document.getElementById('orders-prev')?.addEventListener('click', () => loadOrders(ordersPage - 1));
     document.getElementById('orders-next')?.addEventListener('click', () => loadOrders(ordersPage + 1));
   }

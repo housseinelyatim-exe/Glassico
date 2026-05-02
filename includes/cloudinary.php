@@ -13,10 +13,11 @@ require_once __DIR__ . '/config.php';
  * @param  string      $folder    Cloudinary folder, e.g. 'glassico/products'
  * @return string|null            secure_url on success, null on failure
  */
-function upload_to_cloudinary(string $tmp_path, string $folder): ?string
+function upload_to_cloudinary(string $tmp_path, string $folder, ?string &$error_message = null): ?string
 {
     if (!file_exists($tmp_path) || !is_readable($tmp_path)) {
-        error_log('[Cloudinary] File not found or not readable: ' . $tmp_path);
+        $error_message = 'File not found or not readable.';
+        error_log('[Cloudinary] ' . $error_message . ' Path: ' . $tmp_path);
         return null;
     }
 
@@ -41,14 +42,38 @@ function upload_to_cloudinary(string $tmp_path, string $folder): ?string
     ];
 
     $ch = curl_init();
-    curl_setopt_array($ch, [
+    $curl_options = [
         CURLOPT_URL            => $endpoint,
         CURLOPT_POST           => true,
         CURLOPT_POSTFIELDS     => $post_fields,
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_TIMEOUT        => 30,
         CURLOPT_SSL_VERIFYPEER => true,
-    ]);
+    ];
+
+    // XAMPP/Windows often needs an explicit CA bundle path for HTTPS verification.
+    $ca_candidates = [];
+    $curl_cainfo   = ini_get('curl.cainfo');
+    $openssl_cafile = ini_get('openssl.cafile');
+    if ($curl_cainfo) {
+        $ca_candidates[] = $curl_cainfo;
+    }
+    if ($openssl_cafile) {
+        $ca_candidates[] = $openssl_cafile;
+    }
+    if (defined('PHP_BINARY') && PHP_BINARY) {
+        $php_dir = dirname(PHP_BINARY);
+        $ca_candidates[] = $php_dir . DIRECTORY_SEPARATOR . 'extras' . DIRECTORY_SEPARATOR . 'ssl' . DIRECTORY_SEPARATOR . 'cacert.pem';
+        $ca_candidates[] = dirname($php_dir) . DIRECTORY_SEPARATOR . 'apache' . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'curl-ca-bundle.crt';
+    }
+    foreach ($ca_candidates as $ca_file) {
+        if (is_string($ca_file) && $ca_file !== '' && file_exists($ca_file)) {
+            $curl_options[CURLOPT_CAINFO] = $ca_file;
+            break;
+        }
+    }
+
+    curl_setopt_array($ch, $curl_options);
 
     $response_raw = curl_exec($ch);
     $curl_error   = curl_error($ch);
@@ -56,6 +81,7 @@ function upload_to_cloudinary(string $tmp_path, string $folder): ?string
     curl_close($ch);
 
     if ($curl_error) {
+        $error_message = 'Cloudinary connection error: ' . $curl_error;
         error_log('[Cloudinary] cURL error: ' . $curl_error);
         return null;
     }
@@ -64,6 +90,7 @@ function upload_to_cloudinary(string $tmp_path, string $folder): ?string
 
     if ($http_code !== 200 || empty($response['secure_url'])) {
         $detail = $response['error']['message'] ?? $response_raw;
+        $error_message = 'Cloudinary upload failed: ' . $detail;
         error_log('[Cloudinary] Upload failed (HTTP ' . $http_code . '): ' . $detail);
         return null;
     }

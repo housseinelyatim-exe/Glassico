@@ -92,6 +92,7 @@ if ($method === 'POST') {
     $shippingAddress = $body['shipping_address'] ?? [];
     $paymentMethod   = trim($body['payment_method'] ?? '');
     $guestEmail      = trim($body['guest_email']    ?? '');
+    $allowedPayments = ['credit_card', 'cod', 'd17'];
 
     // Basic validation
     if (empty($items) || !is_array($items)) {
@@ -103,6 +104,12 @@ if ($method === 'POST') {
     if (empty($shippingAddress)) {
         http_response_code(400);
         echo json_encode(['success' => false, 'data' => null, 'error' => 'Shipping address is required.']);
+        exit;
+    }
+
+    if ($paymentMethod !== '' && !in_array($paymentMethod, $allowedPayments, true)) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'data' => null, 'error' => 'Invalid payment method.']);
         exit;
     }
 
@@ -169,7 +176,7 @@ if ($method === 'POST') {
         }
 
         $shipping = $subtotal >= FREE_SHIPPING_THRESHOLD ? 0.00 : FLAT_SHIPPING_RATE;
-        $tax      = round($subtotal * TAX_RATE, 2);
+        $tax      = 0.00;
         $total    = round($subtotal + $shipping + $tax, 2);
 
         // Insert order
