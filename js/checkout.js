@@ -5,18 +5,18 @@
 (function () {
   'use strict';
 
-  const US_STATES = [
-    'AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA',
-    'KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ',
-    'NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT',
-    'VA','WA','WV','WI','WY',
+  const TN_STATES = [
+    'Ariana','Beja','Ben Arous','Bizerte','Gabes','Gafsa','Jendouba','Kairouan',
+    'Kasserine','Kebili','Le Kef','Mahdia','La Manouba','Medenine','Monastir',
+    'Nabeul','Sfax','Sidi Bouzid','Siliana','Sousse','Tataouine','Tozeur','Tunis',
+    'Zaghouan',
   ];
 
   // ── Populate state select ─────────────────────────────────────
   function populateStates() {
     const select = document.getElementById('field-state');
     if (!select) return;
-    US_STATES.forEach(s => {
+    TN_STATES.forEach(s => {
       const opt = document.createElement('option');
       opt.value = s;
       opt.textContent = s;
@@ -44,25 +44,25 @@
           </div>
           <div class="checkout-cart-item__name">${escHtml(item.name)}</div>
           <div class="checkout-cart-item__qty">×${item.qty}</div>
-          <div class="checkout-cart-item__price">$${(item.price * item.qty).toFixed(2)}</div>
+          <div class="checkout-cart-item__price">${(item.price * item.qty).toFixed(2)} TND</div>
         </div>
       `).join('');
     }
 
     // Order Summary totals
     const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
-    const shipping = subtotal >= 200 ? 0 : 15;
+    const shipping = subtotal > 300 ? 0 : 10;
     const total    = subtotal + shipping;
 
     if (summaryContainer) {
       summaryContainer.innerHTML = cart.map(item =>
-        `<div class="order-line"><span>${escHtml(item.name)} ×${item.qty}</span><span>$${(item.price * item.qty).toFixed(2)}</span></div>`
+        `<div class="order-line"><span>${escHtml(item.name)} ×${item.qty}</span><span>${(item.price * item.qty).toFixed(2)} TND</span></div>`
       ).join('');
     }
 
-    setText('summary-subtotal', `$${subtotal.toFixed(2)}`);
-    setText('summary-shipping', shipping === 0 ? 'Complimentary' : `$${shipping.toFixed(2)}`);
-    setText('summary-total',    `$${total.toFixed(2)}`);
+    setText('summary-subtotal', `${subtotal.toFixed(2)} TND`);
+    setText('summary-shipping', `${shipping.toFixed(2)}` + ' TND');
+    setText('summary-total',    `${total.toFixed(2)} TND`);
 
     return { subtotal, shipping, total };
   }
@@ -210,7 +210,7 @@
         confirmation.style.display = 'block';
         confirmation.classList.add('show');
         setText('confirmation-order-id', `#${json.data.order_id}`);
-        setText('confirmation-total',    `$${parseFloat(json.data.total).toFixed(2)}`);
+        setText('confirmation-total',    `${parseFloat(json.data.total).toFixed(2)} TND`);
         confirmation.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
 

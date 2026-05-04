@@ -34,7 +34,7 @@
       if (!json.success) return;
 
       const d = json.data;
-      setText('stat-sales',   '$' + parseFloat(d.total_sales_mtd || 0).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}));
+      setText('stat-sales',   parseFloat(d.total_sales_mtd || 0).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})+'TND');
       setText('stat-orders',  d.active_orders);
       setText('stat-stock',   d.low_stock);
 
@@ -45,7 +45,7 @@
           <tr>
             <td>#${o.id}</td>
             <td>${escHtml(o.customer_email || '—')}</td>
-            <td>$${parseFloat(o.total).toFixed(2)}</td>
+            <td>${parseFloat(o.total).toFixed(2)} TND</td>
             <td><span class="status-pill ${o.status}">${capitalize(o.status)}</span></td>
           </tr>
         `).join('');
@@ -119,7 +119,7 @@
               </div>
             </td>
             <td>${escHtml(p.sku || '—')}</td>
-            <td>$${parseFloat(p.price || 0).toFixed(2)}</td>
+            <td>${parseFloat(p.price || 0).toFixed(2)} TND</td>
             <td>${p.stock}</td>
             <td>${stockPill}</td>
             <td>
@@ -184,7 +184,7 @@
               <td>#${o.id}</td>
               <td>${escHtml(o.customer_email || '—')}</td>
               <td>${formatDate(o.created_at)}</td>
-              <td>$${parseFloat(o.total || 0).toFixed(2)}</td>
+              <td>${parseFloat(o.total || 0).toFixed(2)} TND</td>
               <td>
                 <select class="status-select" data-order-id="${o.id}" onchange="window._adminUpdateOrderStatus(${o.id}, this.value)">
                   ${statusOptions}

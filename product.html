@@ -36,14 +36,10 @@
         <div class="gallery__main">
           <img id="gallery-main-img" src="images/placeholder.svg" alt="Product" width="600" height="600">
         </div>
-        <div class="gallery__thumbs">
-          <div class="gallery__thumb active">
-            <img src="images/placeholder.svg" alt="Thumbnail 1">
-          </div>
-          <div class="gallery__thumb">
-            <img src="images/placeholder.svg" alt="Thumbnail 2">
-          </div>
-        </div>
+
+
+
+
       </div>
 
       <!-- ── RIGHT: Info ────────────────────── -->
@@ -61,7 +57,7 @@
 
         <div class="product-detail__actions">
           <button class="btn-gold btn-full" id="btn-add-to-cart" style="flex:1;">ADD TO CART</button>
-          <button class="btn-icon" id="btn-wishlist" title="Add to Wishlist" aria-label="Wishlist">♡</button>
+
         </div>
 
         <!-- Specs table -->
@@ -155,7 +151,7 @@
               ${badge ? `<div class="product-card__badge">${badge}</div>` : ''}
               <div class="product-card__name">${p.name}</div>
               <div class="product-card__brand">${p.brand || ''}</div>
-              <div class="product-card__price">$${parseFloat(p.price).toFixed(2)}</div>
+              <div class="product-card__price">${parseFloat(p.price).toFixed(2)} TND</div>
             </div>`;
           card.addEventListener('click', (e) => {
             if (e.target.closest('.product-card__quick-add')) {

@@ -38,7 +38,7 @@
 
     setText('product-name',     p.name);
     setText('product-subtitle', p.subtitle || '');
-    setText('product-price',    `$${parseFloat(p.price).toFixed(2)}`);
+    setText('product-price',    `${parseFloat(p.price).toFixed(2)} TND`);
     setText('product-desc',     p.description || '');
     setText('spec-measurements',p.measurements || '—');
     setText('spec-material',    p.material || '—');

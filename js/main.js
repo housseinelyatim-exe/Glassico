@@ -11,7 +11,7 @@
   function createAnnouncementBar() {
     const bar = document.createElement('div');
     bar.className = 'announcement-bar';
-    bar.innerHTML = 'Complimentary shipping on orders over $200.';
+    bar.innerHTML = 'Complimentary shipping on orders over 300 TND.';
     return bar;
   }
 
@@ -31,15 +31,12 @@
       <div class="navbar__inner">
         <div class="navbar__left">
           <a href="shop.html"${activeClass('shop.html')}>Shop</a>
-          <a href="#about"${activeClass('about.html')}>About</a>
-          <a href="#contact"${activeClass('contact.html')}>Contact</a>
+          
         </div>
-
         <a href="index.html" class="navbar__logo">Glassico</a>
 
         <div class="navbar__right">
-          <button aria-label="Search" id="nav-search-btn">🔍</button>
-          <a href="#" aria-label="Wishlist" id="nav-wishlist-btn">♡</a>
+          
           <a href="cart.html" aria-label="Cart" style="position:relative;">
             🛍
             <span class="cart-badge" style="display:none;">0</span>
@@ -54,8 +51,6 @@
 
       <div class="navbar__mobile-menu" id="mobile-menu">
         <a href="shop.html">Shop</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
         <a href="cart.html">Cart</a>
         <a href="auth.html">Account</a>
       </div>

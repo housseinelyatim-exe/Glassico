@@ -119,7 +119,7 @@
         ${badgeHtml}
         <div class="product-card__name">${escHtml(p.name)}</div>
         <div class="product-card__brand">${escHtml(p.brand || '')}</div>
-        <div class="product-card__price">$${parseFloat(p.price).toFixed(2)}</div>
+        <div class="product-card__price">${parseFloat(p.price).toFixed(2)} TND</div>
       </div>
     `;
 
@@ -188,8 +188,8 @@
       let min = parseInt(minInput.value);
       let max = parseInt(maxInput.value);
       if (min > max) { min = max; minInput.value = min; }
-      if (minDisplay) minDisplay.textContent = '$' + min;
-      if (maxDisplay) maxDisplay.textContent = '$' + max;
+      if (minDisplay) minDisplay.textContent = `${min} TND`;
+      if (maxDisplay) maxDisplay.textContent = `${max} TND`;
       updateFill();
       state.filters.price_min = min;
       state.filters.price_max = max;
@@ -200,6 +200,11 @@
 
     minInput.addEventListener('input', onSliderChange);
     maxInput.addEventListener('input', onSliderChange);
+
+    if (minDisplay) minDisplay.textContent = `${minInput.value} TND`;
+    if (maxDisplay) maxDisplay.textContent = `${maxInput.value} TND`;
+    state.filters.price_min = parseInt(minInput.value);
+    state.filters.price_max = parseInt(maxInput.value);
     updateFill();
   }
 
@@ -266,8 +271,8 @@
     brand:     'Brand',
     shape:     'Shape',
     color:     'Color',
-    price_min: 'Min $',
-    price_max: 'Max $',
+    price_min: 'Min TND',
+    price_max: 'Max TND',
     search:    'Search',
   };
 
@@ -324,8 +329,8 @@
     if (maxInput) maxInput.value = maxInput.max;
     const minD = document.getElementById('price-min-display');
     const maxD = document.getElementById('price-max-display');
-    if (minD) minD.textContent = '$' + (minInput?.min || '100');
-    if (maxD) maxD.textContent = '$' + (maxInput?.max || '1000');
+    if (minD) minD.textContent = `${minInput?.min || '100'} TND`;
+    if (maxD) maxD.textContent = `${maxInput?.max || '1000'} TND`;
     const fill = document.getElementById('price-fill');
     if (fill) { fill.style.left = '0%'; fill.style.width = '100%'; }
     resetPage();

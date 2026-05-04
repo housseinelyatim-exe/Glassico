@@ -73,35 +73,14 @@
               <div class="cart-curation__title">✦ Curation Service</div>
               <div class="cart-curation__desc">
                 Our stylists will review your selection and reach out with personalised recommendations.
-                Complimentary with every purchase over $400.
+                Complimentary with every purchase over 400 TND.
               </div>
             </div>
           </div>
 
         </div>
 
-        <!-- Complete the Wardrobe -->
-        <section class="wardrobe-section">
-          <h2>Complete the Wardrobe</h2>
-          <div class="wardrobe-grid">
-            <div class="wardrobe-card">
-              <div class="wardrobe-card__img">🕶</div>
-              <div>
-                <div class="wardrobe-card__name">The Leather Case</div>
-                <div class="product-card__brand" style="margin-bottom:6px;">Glassico Essentials</div>
-                <div class="wardrobe-card__price">$85.00</div>
-              </div>
-            </div>
-            <div class="wardrobe-card">
-              <div class="wardrobe-card__img">⛓</div>
-              <div>
-                <div class="wardrobe-card__name">Gold Chain Strap</div>
-                <div class="product-card__brand" style="margin-bottom:6px;">Glassico Essentials</div>
-                <div class="wardrobe-card__price">$45.00</div>
-              </div>
-            </div>
-          </div>
-        </section>
+
 
       </div>
     </div>
@@ -143,7 +122,7 @@
             <div>
               <div class="cart-item__name">${escHtml(item.name)}</div>
               <div class="cart-item__variant">${escHtml(item.brand || '')}${item.subtitle ? ' — ' + escHtml(item.subtitle) : ''}</div>
-              <div class="cart-item__price">$${itemTotal}</div>
+              <div class="cart-item__price">${itemTotal} TND</div>
               <div class="qty-control">
                 <button class="qty-btn-minus" data-id="${item.id}" aria-label="Decrease quantity">−</button>
                 <input type="number" value="${item.qty}" min="1" max="99" data-id="${item.id}" class="qty-input" aria-label="Quantity">
@@ -195,12 +174,12 @@
 
     function updateSummary(cart) {
       const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
-      const shipping = subtotal >= 200 ? 0 : 15;
+      const shipping = subtotal > 300 ? 0 : 10;
       const total    = subtotal + shipping;
 
-      document.getElementById('summary-subtotal').textContent = '$' + subtotal.toFixed(2);
-      document.getElementById('summary-shipping').textContent = shipping === 0 ? 'Complimentary' : '$' + shipping.toFixed(2);
-      document.getElementById('summary-total').textContent    = '$' + total.toFixed(2);
+      document.getElementById('summary-subtotal').textContent = subtotal.toFixed(2) + ' TND';
+      document.getElementById('summary-shipping').textContent = shipping.toFixed(2) + ' TND';
+      document.getElementById('summary-total').textContent    = total.toFixed(2) + ' TND';
     }
 
     document.addEventListener('DOMContentLoaded', renderCart);
