@@ -38,10 +38,9 @@
         <div class="navbar__right">
           
           <a href="cart.html" aria-label="Cart" style="position:relative;">
-            🛍
-            <span class="cart-badge" style="display:none;">0</span>
+            <img src="images/cart.png" alt="cart" style="width: 20px; height: 20px;">
           </a>
-          <a href="auth.html" aria-label="Account">👤</a>
+          <a href="auth.html" aria-label="Account"><img src="images/profile.png" alt="Account" style="width: 20px; height: 20px;"></a>
         </div>
 
         <div class="navbar__hamburger" id="hamburger" aria-label="Menu">
@@ -97,9 +96,9 @@
               <button type="button">JOIN</button>
             </div>
             <div style="margin-top:20px;display:flex;gap:16px;">
-              <a href="#" style="color:rgba(255,255,255,0.5);font-size:20px;">𝕏</a>
-              <a href="#" style="color:rgba(255,255,255,0.5);font-size:20px;">📷</a>
-              <a href="#" style="color:rgba(255,255,255,0.5);font-size:20px;">📌</a>
+              <a href="#" style="color:rgba(255,255,255,0.5);font-size:20px;"><img src="images/facebook.png" alt="facebook" style="width: 24px; vertical-align: middle;"></a>
+              <a href="#" style="color:rgba(255,255,255,0.5);font-size:20px;"><img src="images/instagram.png" alt="instagram" style="width: 24px; vertical-align: middle;"></a>
+              <a href="#" style="color:rgba(255,255,255,0.5);font-size:20px;"><img src="images/github.png" alt="github" style="width: 24px; vertical-align: middle;"></a>
             </div>
           </div>
         </div>

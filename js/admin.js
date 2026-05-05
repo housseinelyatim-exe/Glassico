@@ -94,8 +94,8 @@
             <td>${p.stock}</td>
             <td>${stockPill}</td>
             <td>
-              <button class="admin-table__action" onclick="window._adminEditProduct(${p.id})" title="Edit">✏️</button>
-              <button class="admin-table__action" onclick="window._adminDeleteProduct(${p.id}, '${escHtml(p.name)}')" title="Delete" style="margin-left:4px;">🗑</button>
+              <button class="admin-table__action" onclick="window._adminEditProduct(${p.id})" title="Edit"><img src="images/curated.png" alt="curated" style="width: 24px; vertical-align: middle;"></button>
+              <button class="admin-table__action" onclick="window._adminDeleteProduct(${p.id}, '${escHtml(p.name)}')" title="Delete" style="margin-left:4px;"><img src="images/curated.png" alt="curated" style="width: 24px; vertical-align: middle;"></button>
             </td>
           </tr>`;
       }).join('');
@@ -123,8 +123,8 @@
             <td>${p.stock}</td>
             <td>${stockPill}</td>
             <td>
-              <button class="admin-table__action" onclick="window._adminEditProduct(${p.id})" title="Edit">✏️</button>
-              <button class="admin-table__action" onclick="window._adminDeleteProduct(${p.id}, '${escHtml(p.name)}')" title="Delete" style="margin-left:4px;">🗑</button>
+              <button class="admin-table__action" onclick="window._adminEditProduct(${p.id})" title="Edit"><img src="images/curated.png" alt="curated" style="width: 24px; vertical-align: middle;"></button>
+              <button class="admin-table__action" onclick="window._adminDeleteProduct(${p.id}, '${escHtml(p.name)}')" title="Delete" style="margin-left:4px;"><img src="images/curated.png" alt="curated" style="width: 24px; vertical-align: middle;"></button>
             </td>
           </tr>`;
       }).join('');
