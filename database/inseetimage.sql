@@ -1,0 +1,30 @@
+UPDATE products
+ SET image_url = CASE id
+     WHEN 48 THEN 'https://res.cloudinary.com/dwzeqbmrs/image/upload/v1777984414/9D9EGLHCUMFS_kmu8kp.jpg'
+     WHEN 49 THEN 'https://res.cloudinary.com/dwzeqbmrs/image/upload/v1777984413/8W44VNR0ZW63_vucfud.jpg'
+     WHEN 50 THEN 'https://res.cloudinary.com/dwzeqbmrs/image/upload/v1777984413/8VF2CVS0PJ7D_jm9i48.jpg'
+     WHEN 51 THEN 'https://res.cloudinary.com/dwzeqbmrs/image/upload/v1777984412/8TKGXDAVD1C9_sabkxe.jpg'
+     WHEN 52 THEN 'https://res.cloudinary.com/dwzeqbmrs/image/upload/v1777984412/7X9ROKXZHGPC_lb9xzn.jpg'
+     WHEN 53 THEN 'https://res.cloudinary.com/dwzeqbmrs/image/upload/v1777984411/7R8C9AHAW4SN_qmlyli.jpg'
+     WHEN 54 THEN 'https://res.cloudinary.com/dwzeqbmrs/image/upload/v1777984411/7Q63T9VT7W7X_phyrh1.jpg'
+     WHEN 55 THEN 'https://res.cloudinary.com/dwzeqbmrs/image/upload/v1777984410/6WZY7RR77YGE_rnmxyc.jpg'
+     WHEN 56 THEN 'https://res.cloudinary.com/dwzeqbmrs/image/upload/v1777984410/6OUH6O5S2TDP_r1q1zy.jpg'
+     WHEN 57 THEN 'https://res.cloudinary.com/dwzeqbmrs/image/upload/v1777984409/6K10ST3YSARA_mcq36e.jpg'
+     WHEN 58 THEN 'https://res.cloudinary.com/dwzeqbmrs/image/upload/v1777984408/5CLW0CJO4P2B_ch0x4j.jpg'
+     WHEN 59 THEN 'https://res.cloudinary.com/dwzeqbmrs/image/upload/v1777984408/5AN41VMMYL9A_l8zdkk.jpg'
+     WHEN 60 THEN 'https://res.cloudinary.com/dwzeqbmrs/image/upload/v1777984407/4TLINGLUCC6L_nqdu7u.jpg'
+     WHEN 61 THEN 'https://res.cloudinary.com/dwzeqbmrs/image/upload/v1777984407/4NTJ2RBMO9BT_xsrnbb.jpg'
+     WHEN 62 THEN 'https://res.cloudinary.com/dwzeqbmrs/image/upload/v1777984406/3Q6L4S5PGXM5_silv3k.jpg'
+     WHEN 63 THEN 'https://res.cloudinary.com/dwzeqbmrs/image/upload/v1777984406/2U2YBCPZMSRB_oxhzhh.jpg'
+     WHEN 64 THEN 'https://res.cloudinary.com/dwzeqbmrs/image/upload/v1777984405/2CYCTUS0I82C_zyye58.jpg'
+     WHEN 65 THEN 'https://res.cloudinary.com/dwzeqbmrs/image/upload/v1777984404/0YKO01NIM9PM_vpxttd.jpg'
+     WHEN 66 THEN 'https://res.cloudinary.com/dwzeqbmrs/image/upload/v1777984404/0S7NS61UGWZR_wkufu8.jpg'
+     WHEN 67 THEN 'https://res.cloudinary.com/dwzeqbmrs/image/upload/v1777984403/0FX5C7D0N89F_xbiolq.jpg'
+     WHEN 68 THEN 'https://res.cloudinary.com/dwzeqbmrs/image/upload/v1777984403/0BRJ7XSKXNLR_ixusn3.jpg'
+     WHEN 69 THEN 'https://res.cloudinary.com/dwzeqbmrs/image/upload/v1777984402/0B0JPVMW5YUI_th3boh.jpg'
+     WHEN 70 THEN 'https://res.cloudinary.com/dwzeqbmrs/image/upload/v1777984401/ESJTVX81DS8L_nkam8r.jpg'
+     WHEN 71 THEN 'https://res.cloudinary.com/dwzeqbmrs/image/upload/v1777984401/EJFH4QL6GGEP_h4pdq5.jpg'
+     WHEN 72 THEN 'https://res.cloudinary.com/dwzeqbmrs/image/upload/v1777984399/B43TA8GFIB62_pqnyab.jpg'
+     ELSE image_url
+ END
+ WHERE id BETWEEN 48 AND 72;
