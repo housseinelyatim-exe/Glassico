@@ -84,7 +84,7 @@
       if (!currentProduct) return;
       if (window.Cart) {
         window.Cart.addItem(currentProduct, 1);
-        // Flash effect on button
+
         btn.textContent = '✓ ADDED';
         btn.style.background = '#2E7D32';
         setTimeout(() => {
@@ -96,7 +96,7 @@
     });
   }
 
-  // ── Helpers ───────────────────────────────────────────────────
+  // ── Helpers
   function setText(id, text) {
     const el = document.getElementById(id);
     if (el) el.textContent = text;

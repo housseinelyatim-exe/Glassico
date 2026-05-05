@@ -82,7 +82,7 @@ function updateBadge() {
 function flashBadge() {
   document.querySelectorAll('.cart-badge').forEach(el => {
     el.classList.remove('badge-flash');
-    void el.offsetWidth; // reflow
+    void el.offsetWidth;
     el.classList.add('badge-flash');
   });
 }

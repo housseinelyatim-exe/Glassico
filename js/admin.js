@@ -1,6 +1,3 @@
-// =============================================================
-//  Glassico — Admin Dashboard
-// =============================================================
 
 (function () {
   'use strict';
@@ -9,7 +6,6 @@
   let ordersPage    = 1;
   let editingId     = null;
 
-  // ── Guard: require admin session ─────────────────────────────
   async function guardAdmin() {
     try {
       const res  = await fetch('api/auth.php?action=session');
@@ -25,7 +21,6 @@
     }
   }
 
-  // ── Dashboard metrics ─────────────────────────────────────────
   async function loadDashboard() {
     try {
       const res  = await fetch('admin/dashboard.php');
@@ -55,7 +50,6 @@
     }
   }
 
-  // ── Inventory table ───────────────────────────────────────────
   async function loadInventory(page = 1) {
     inventoryPage = page;
     const compactSearch = document.getElementById('inventory-search')?.value.trim() || '';
@@ -205,7 +199,6 @@
     }
   }
 
-  // ── Update order status ───────────────────────────────────────
   window._adminUpdateOrderStatus = async function (id, status) {
     try {
       const res  = await fetch(`admin/orders.php?id=${id}`, {
@@ -219,7 +212,6 @@
     } catch { showToast('Network error.', 'error'); }
   };
 
-  // ── Product modal ─────────────────────────────────────────────
   function openModal(product = null) {
     editingId = product ? product.id : null;
     const modal    = document.getElementById('product-modal');
@@ -264,7 +256,6 @@
     editingId = null;
   }
 
-  // ── Edit product (load then open) ────────────────────────────
   window._adminEditProduct = async function (id) {
     try {
       const res  = await fetch(`admin/products.php?page=1&limit=1&id=${id}`);
@@ -275,7 +266,6 @@
     } catch { showToast('Could not load product.', 'error'); }
   };
 
-  // ── Delete product ────────────────────────────────────────────
   window._adminDeleteProduct = async function (id, name) {
     if (!confirm(`Delete "${name}" permanently? This cannot be undone.`)) return;
     try {
@@ -286,7 +276,6 @@
     } catch { showToast('Network error.', 'error'); }
   };
 
-  // ── Image upload ──────────────────────────────────────────────
   function bindImageUpload() {
     const input   = document.getElementById('modal-image-file');
     const preview = document.getElementById('modal-image-preview');
@@ -316,7 +305,6 @@
     });
   }
 
-  // ── Product form submit ───────────────────────────────────────
   function bindProductForm() {
     const form = document.getElementById('product-form');
     if (!form) return;
@@ -368,7 +356,6 @@
     });
   }
 
-  // ── Announcement banner (localStorage) ───────────────────────
   function bindBanner() {
     const publishBtn = document.getElementById('banner-publish');
     const textarea   = document.getElementById('banner-text');
@@ -385,7 +372,6 @@
       localStorage.setItem('glassico_banner', JSON.stringify(bannerData));
       showToast('Banner published.');
 
-      // Update announcement bar on this page
       const bar = document.querySelector('.announcement-bar');
       if (bar && bannerData.enabled && bannerData.text) {
         bar.textContent = bannerData.text;
@@ -393,7 +379,6 @@
     });
   }
 
-  // ── Sidebar nav ───────────────────────────────────────────────
   function bindSidebarNav() {
     const items = document.querySelectorAll('.admin-nav__item');
     const views = document.querySelectorAll('.admin-view');
@@ -417,7 +402,6 @@
     });
   }
 
-  // ── Inventory search ──────────────────────────────────────────
   function bindInventorySearch() {
     let t;
     const compact = document.getElementById('inventory-search');
@@ -433,7 +417,6 @@
     bind(full);
   }
 
-  // ── Pagination ────────────────────────────────────────────────
   function bindPagination() {
     document.getElementById('inventory-prev')?.addEventListener('click', () => loadInventory(inventoryPage - 1));
     document.getElementById('inventory-next')?.addEventListener('click', () => loadInventory(inventoryPage + 1));
@@ -531,7 +514,6 @@
     await loadDashboard();
     loadInventory(1);
 
-    // Expose for dashboard inline inventory panel
     window._adminOpenModal = openModal;
   });
 })();

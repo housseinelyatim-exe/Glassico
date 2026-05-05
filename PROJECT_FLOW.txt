@@ -1,0 +1,74 @@
+GLASSICO PROJECT - HOW IT WORKS
+================================
+
+1) OVERVIEW
+- Glassico is a PHP + MySQL e-commerce web app with static HTML/CSS/JS pages.
+- Frontend pages call backend API endpoints under /api.
+- Admin pages call protected endpoints under /admin and /api.
+
+2) MAIN FOLDERS
+- /index.html, /shop.html, /product.html, /cart.html, /checkout.html, /auth.html:
+  Customer-facing pages.
+- /js:
+  Frontend logic (cart, shop filters, checkout submission, auth, admin dashboard).
+- /api:
+  JSON APIs for products, authentication, orders, and image upload.
+- /admin:
+  Admin-only APIs for dashboard metrics, product management, and order management.
+- /includes:
+  Shared backend code (configuration, DB connection, CORS/session/auth helpers).
+- /database:
+  SQL schema and seed/query files.
+
+3) REQUEST FLOW
+- Browser loads an HTML page.
+- Page JavaScript calls APIs with fetch(), for example:
+  - api/products.php?action=list (shop data)
+  - api/auth.php?action=login|signup|session|logout
+  - api/orders.php (create order / list customer orders)
+- APIs return JSON in this format:
+  { success: boolean, data: ..., error: string }
+
+4) AUTHENTICATION + SESSIONS
+- Session helpers are in includes/auth_helpers.php.
+- Customer login stores customer_id in session.
+- Admin login stores admin_id in session.
+- Protected endpoints use:
+  - require_login() for customer-only routes
+  - require_admin() for admin-only routes
+
+5) DATABASE LAYER
+- includes/db.php provides a shared PDO connection.
+- Main tables (database/schema.sql):
+  products, customers, admins, orders, order_items, wishlist.
+- APIs use prepared statements for reads/writes.
+
+6) SHOPPING FLOW
+- Product browsing: shop.js -> api/products.php?action=list with filters/search/sort.
+- Product details: product page -> api/products.php?action=single&id=...
+- Cart: stored in localStorage key "glassico_cart" (js/cart.js).
+- Checkout: checkout.js sends cart + shipping + payment method to api/orders.php.
+- Order creation:
+  - Validates items and stock
+  - Inserts order and order_items
+  - Decreases product stock
+
+7) ADMIN FLOW
+- Admin UI is admin.html + js/admin.js.
+- Admin guard checks api/auth.php?action=session (must be admin).
+- Inventory management (create/edit/delete products) uses admin/products.php.
+- Order status updates use admin/orders.php.
+- Dashboard metrics use admin/dashboard.php.
+- Product image upload uses api/upload.php (admin only), then Cloudinary URL is saved.
+
+8) CONFIGURATION
+- includes/config.php has default settings.
+- includes/config.local.php (created from config.local.example.php) overrides local values.
+- Typical local setup:
+  - Set DB credentials in config.local.php
+  - Set APP_URL to http://localhost/glassico
+  - Import database/schema.sql into MySQL
+
+9) IMPORTANT NOTE
+- CORS/session bootstrap is centralized in includes/cors.php and included at top of APIs.
+- This ensures JSON headers, CORS headers, and session start are consistent across endpoints.
