@@ -1,11 +1,6 @@
-// =============================================================
-//  Glassico — Auth Page (Login / Sign Up)
-// =============================================================
-
 (function () {
   'use strict';
 
-  // ── Tab toggle ────────────────────────────────────────────────
   function bindTabs() {
     const tabs   = document.querySelectorAll('.auth-tab');
     const panels = document.querySelectorAll('.auth-panel');
@@ -23,7 +18,6 @@
     });
   }
 
-  // ── Error helpers ─────────────────────────────────────────────
   function setError(fieldId, msg) {
     const field = document.getElementById(fieldId);
     const errEl = document.getElementById(fieldId + '-error');
@@ -39,8 +33,6 @@
   function redirectAfterAuth(isAdmin) {
     window.location.href = isAdmin ? 'admin.html' : 'index.html';
   }
-
-  // ── Login ─────────────────────────────────────────────────────
   function bindLogin() {
     const form = document.getElementById('login-form');
     if (!form) return;
@@ -152,7 +144,6 @@
     } catch {}
   }
 
-  // ── Deep-link to signup tab ───────────────────────────────────
   function checkHashTab() {
     if (window.location.hash === '#signup') {
       const tab = document.querySelector('.auth-tab[data-tab="signup"]');
@@ -160,7 +151,7 @@
     }
   }
 
-  // ── Init ──────────────────────────────────────────────────────
+  // ── Init
   document.addEventListener('DOMContentLoaded', () => {
     bindTabs();
     bindLogin();

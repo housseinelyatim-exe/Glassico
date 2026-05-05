@@ -12,7 +12,6 @@
 </head>
 <body>
 
-  <!-- main.js injects announcement bar + navbar -->
 
   <!-- Breadcrumb -->
   <div style="background:var(--surface);border-bottom:1px solid var(--border);padding:14px 0;">
@@ -25,13 +24,11 @@
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════
-       PRODUCT DETAIL
-  ═══════════════════════════════════════ -->
+  <!-- PRODUCT DETAIL-->
   <div class="container" id="product-detail-container">
     <div class="product-detail">
 
-      <!-- ── LEFT: Gallery ─────────────────── -->
+
       <div class="product-detail__gallery">
         <div class="gallery__main">
           <img id="gallery-main-img" src="images/placeholder.svg" alt="Product" width="600" height="600">
@@ -42,7 +39,7 @@
 
       </div>
 
-      <!-- ── RIGHT: Info ────────────────────── -->
+
       <div class="product-detail__info">
 
         <div class="product-detail__badge" id="product-badge"></div>
@@ -95,17 +92,6 @@
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════
-       YOU MAY ALSO LIKE
-  ═══════════════════════════════════════ -->
-  <section style="padding:60px 0 80px;background:var(--bg);">
-    <div class="container">
-      <h2 style="margin-bottom:32px;">You May Also Like</h2>
-      <div class="products-grid" id="related-grid">
-        <!-- Populated dynamically -->
-      </div>
-    </div>
-  </section>
 
   <!-- main.js injects footer -->
 
@@ -113,7 +99,7 @@
   <script src="js/main.js"></script>
   <script src="js/product.js"></script>
   <script>
-    // Sync breadcrumb name after product loads
+    // Sync breadcrumb
     const nameEl = document.getElementById('product-name');
     const observer = new MutationObserver(() => {
       const breadcrumb = document.getElementById('breadcrumb-name');
@@ -124,46 +110,7 @@
     });
     if (nameEl) observer.observe(nameEl, { childList: true, characterData: true, subtree: true });
 
-    // Load related products
-    document.addEventListener('DOMContentLoaded', async () => {
-      try {
-        const res  = await fetch('api/products.php?action=list&sort=newest&limit=4');
-        const json = await res.json();
-        if (!json.success) return;
-        const grid = document.getElementById('related-grid');
-        const currentId = parseInt(new URLSearchParams(window.location.search).get('id'));
-        const products  = json.data.products.filter(p => p.id !== currentId).slice(0, 4);
 
-        products.forEach(p => {
-          const img  = p.image_url || 'images/placeholder.svg';
-          let badge  = '';
-          if (p.badge === 'bestseller') badge = `<span class="badge badge-gold">Bestseller</span>`;
-          else if (p.badge === 'new')   badge = `<span class="badge badge-dark">New</span>`;
-
-          const card = document.createElement('div');
-          card.className = 'product-card';
-          card.innerHTML = `
-            <div class="product-card__image-wrap">
-              <img src="${img}" alt="${p.name}" loading="lazy">
-              <div class="product-card__quick-add">+ QUICK ADD</div>
-            </div>
-            <div class="product-card__body">
-              ${badge ? `<div class="product-card__badge">${badge}</div>` : ''}
-              <div class="product-card__name">${p.name}</div>
-              <div class="product-card__brand">${p.brand || ''}</div>
-              <div class="product-card__price">${parseFloat(p.price).toFixed(2)} TND</div>
-            </div>`;
-          card.addEventListener('click', (e) => {
-            if (e.target.closest('.product-card__quick-add')) {
-              if (window.Cart) window.Cart.addItem(p, 1);
-              return;
-            }
-            window.location.href = `product.html?id=${p.id}`;
-          });
-          grid.appendChild(card);
-        });
-      } catch {}
-    });
   </script>
 </body>
 </html>

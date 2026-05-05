@@ -1,13 +1,10 @@
-// =============================================================
-//  Glassico — Product Detail Page
-// =============================================================
 
 (function () {
   'use strict';
 
   let currentProduct = null;
 
-  // ── Fetch product ─────────────────────────────────────────────
+  // ── Fetch product
   async function loadProduct(id) {
     try {
       const res  = await fetch(`api/products.php?action=single&id=${id}`);
@@ -20,7 +17,7 @@
     }
   }
 
-  // ── Render ────────────────────────────────────────────────────
+  // ── Rende
   function render(p) {
     currentProduct = p;
 
@@ -47,17 +44,15 @@
     setText('spec-gender',      p.gender ? capitalize(p.gender) : '—');
     setText('spec-color',       p.color || '—');
 
-    // Update document title
     document.title = `${p.name} — Glassico`;
 
-    // Images
     const imgSrc = p.image_url || 'images/placeholder.svg';
     setImage('gallery-main-img', imgSrc, p.name);
 
     const thumbs = document.querySelectorAll('.gallery__thumb');
     thumbs.forEach((t, i) => {
       const img = t.querySelector('img');
-      if (img) img.src = imgSrc; // same image for both thumbs (no multiple images in schema)
+      if (img) img.src = imgSrc;
       t.addEventListener('click', () => {
         setImage('gallery-main-img', img?.src || imgSrc, p.name);
         thumbs.forEach(th => th.classList.remove('active'));
@@ -80,7 +75,7 @@
     }
   }
 
-  // ── Add to cart ───────────────────────────────────────────────
+  // Add to cart
   function bindAddToCart() {
     const btn = document.getElementById('btn-add-to-cart');
     if (!btn) return;
@@ -89,7 +84,7 @@
       if (!currentProduct) return;
       if (window.Cart) {
         window.Cart.addItem(currentProduct, 1);
-        // Flash effect on button
+
         btn.textContent = '✓ ADDED';
         btn.style.background = '#2E7D32';
         setTimeout(() => {
@@ -101,46 +96,7 @@
     });
   }
 
-  // ── Wishlist toggle ───────────────────────────────────────────
-  function bindWishlist() {
-    const btn = document.getElementById('btn-wishlist');
-    if (!btn) return;
-
-    const wishlist = getWishlist();
-    if (currentProduct && wishlist.includes(currentProduct.id)) {
-      btn.textContent  = '♥';
-      btn.style.color  = 'var(--gold)';
-      btn.style.borderColor = 'var(--gold)';
-    }
-
-    btn.addEventListener('click', () => {
-      if (!currentProduct) return;
-      const wl  = getWishlist();
-      const idx = wl.indexOf(currentProduct.id);
-      if (idx > -1) {
-        wl.splice(idx, 1);
-        btn.textContent  = '♡';
-        btn.style.color  = '';
-        btn.style.borderColor = '';
-        showToast('Removed from wishlist.');
-      } else {
-        wl.push(currentProduct.id);
-        btn.textContent  = '♥';
-        btn.style.color  = 'var(--gold)';
-        btn.style.borderColor = 'var(--gold)';
-        showToast('Saved to wishlist.');
-      }
-      localStorage.setItem('glassico_wishlist', JSON.stringify(wl));
-    });
-  }
-
-  function getWishlist() {
-    try {
-      return JSON.parse(localStorage.getItem('glassico_wishlist')) || [];
-    } catch { return []; }
-  }
-
-  // ── Helpers ───────────────────────────────────────────────────
+  // ── Helpers
   function setText(id, text) {
     const el = document.getElementById(id);
     if (el) el.textContent = text;
@@ -155,18 +111,7 @@
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
-  function showError(msg) {
-    const container = document.getElementById('product-detail-container');
-    if (container) {
-      container.innerHTML = `
-        <div style="text-align:center;padding:80px 0;">
-          <div style="font-size:40px;margin-bottom:16px;">😞</div>
-          <h2>Product Not Found</h2>
-          <p style="color:var(--muted);margin-top:8px;">${msg}</p>
-          <a href="shop.html" class="btn-dark mt-24" style="display:inline-flex;margin-top:24px;">BACK TO SHOP</a>
-        </div>`;
-    }
-  }
+
 
   function showToast(msg) {
     let toast = document.getElementById('glassico-toast');
@@ -194,15 +139,12 @@
     }, 2800);
   }
 
-  // ── Init ──────────────────────────────────────────────────────
+  // ── Init
   document.addEventListener('DOMContentLoaded', async () => {
     const params = new URLSearchParams(window.location.search);
     const id     = parseInt(params.get('id'), 10);
 
-    if (!id) {
-      showError('No product ID specified.');
-      return;
-    }
+
 
     const product = await loadProduct(id);
     if (!product) return;

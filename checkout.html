@@ -13,7 +13,6 @@
 
   <!-- main.js injects announcement bar + navbar -->
 
-  <!-- Order Confirmation (hidden until success) -->
   <div class="container" id="order-confirmation" style="display:none;text-align:center;padding:80px 0;">
     <div style="font-size:56px;margin-bottom:16px;">✅</div>
     <h1 style="font-family:'Playfair Display',serif;font-size:36px;margin-bottom:12px;">Order Confirmed</h1>
@@ -31,20 +30,16 @@
     <form id="checkout-form" novalidate>
       <div class="checkout-layout">
 
-        <!-- ── LEFT COLUMN ─────────────────────── -->
         <div>
 
-          <!-- 1. Your Selection -->
           <div class="checkout-section">
             <div class="checkout-section__title">
               <span>1</span> Your Selection
             </div>
             <div id="checkout-cart-items">
-              <!-- Populated by checkout.js -->
             </div>
           </div>
 
-          <!-- 2. Shipping Address -->
           <div class="checkout-section">
             <div class="checkout-section__title">
               <span>2</span> Shipping Address
@@ -101,7 +96,6 @@
             </div>
           </div>
 
-          <!-- 3. Payment -->
           <div class="checkout-section">
             <div class="checkout-section__title">
               <span>3</span> Secure Payment
@@ -148,7 +142,6 @@
 
         </div>
 
-        <!-- ── RIGHT: Order Summary ────────────── -->
         <div id="checkout-right">
           <div class="order-summary-sticky">
             <div class="order-summary-sticky__title">Order Summary</div>

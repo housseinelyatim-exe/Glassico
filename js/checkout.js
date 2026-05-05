@@ -1,6 +1,3 @@
-// =============================================================
-//  Glassico — Checkout Page
-// =============================================================
 
 (function () {
   'use strict';
@@ -12,7 +9,6 @@
     'Zaghouan',
   ];
 
-  // ── Populate state select ─────────────────────────────────────
   function populateStates() {
     const select = document.getElementById('field-state');
     if (!select) return;
@@ -24,7 +20,6 @@
     });
   }
 
-  // ── Render cart summary (read-only) ──────────────────────────
   function renderCartSummary() {
     const cart = window.Cart ? window.Cart.getCart() : getCartFallback();
     const selectionContainer = document.getElementById('checkout-cart-items');
@@ -35,7 +30,6 @@
       return;
     }
 
-    // Your Selection list
     if (selectionContainer) {
       selectionContainer.innerHTML = cart.map(item => `
         <div class="checkout-cart-item">
@@ -67,7 +61,6 @@
     return { subtotal, shipping, total };
   }
 
-  // ── Payment method toggle ─────────────────────────────────────
   function bindPaymentToggle() {
     const options = document.querySelectorAll('.payment-option');
     const cardFields = document.getElementById('card-fields');
@@ -85,7 +78,6 @@
     });
   }
 
-  // ── Card number formatting ────────────────────────────────────
   function bindCardFormat() {
     const input = document.getElementById('field-card-number');
     if (!input) return;
@@ -103,7 +95,6 @@
     }
   }
 
-  // ── Validation ────────────────────────────────────────────────
   function setError(fieldId, msg) {
     const field = document.getElementById(fieldId);
     const errEl = document.getElementById(fieldId + '-error');
@@ -158,7 +149,6 @@
     return valid;
   }
 
-  // ── Submit ────────────────────────────────────────────────────
   async function handleSubmit(e) {
     e.preventDefault();
     if (!validate()) return;
@@ -235,7 +225,6 @@
     try { return JSON.parse(localStorage.getItem('glassico_cart')) || []; } catch { return []; }
   }
 
-  // ── Init ──────────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', () => {
     populateStates();
     renderCartSummary();

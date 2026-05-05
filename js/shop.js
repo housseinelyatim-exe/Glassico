@@ -1,6 +1,3 @@
-// =============================================================
-//  Glassico — Shop Page
-// =============================================================
 
 (function () {
   'use strict';
@@ -8,20 +5,12 @@
   const state = {
     page:    1,
     filters: {},
-    sort:    'featured',
+    sort:    'price-low',
     total:   0,
     loading: false,
   };
 
-  const COLORS = {
-    'Black':   '#1A1A1A',
-    'Havana':  '#5C3317',
-    'Gold':    '#B8922A',
-    'Silver':  '#9E9E9E',
-    'Onyx':    '#2C2C2C',
-    'Amber':   '#D4821A',
-    'Crystal': '#D6EAF8',
-  };
+
 
   let debounceTimer = null;
 
@@ -30,7 +19,7 @@
     debounceTimer = setTimeout(fn, ms);
   }
 
-  // ── Build query string ────────────────────────────────────────
+  // Build query string
   function buildQuery() {
     const f   = state.filters;
     const qs  = new URLSearchParams();
@@ -41,17 +30,13 @@
     qs.set('sort',   state.sort);
 
     if (f.gender)    qs.set('gender',    f.gender);
-    if (f.brand)     qs.set('brand',     f.brand);
-    if (f.shape)     qs.set('shape',     f.shape);
-    if (f.color)     qs.set('color',     f.color);
     if (f.price_min) qs.set('price_min', f.price_min);
     if (f.price_max) qs.set('price_max', f.price_max);
-    if (f.search)    qs.set('search',    f.search);
 
     return qs.toString();
   }
 
-  // ── Fetch & render ────────────────────────────────────────────
+  // Fetch & render
   async function loadProducts(append = false) {
     if (state.loading) return;
     state.loading = true;
@@ -95,7 +80,7 @@
     }
   }
 
-  // ── Create product card element ───────────────────────────────
+  // Create product card element
   function createCard(p) {
     const card = document.createElement('div');
     card.className = 'product-card';
@@ -142,7 +127,7 @@
     }
   }
 
-  // ── Filters ───────────────────────────────────────────────────
+  //Filters
   function resetPage() {
     state.page = 1;
     const grid = document.getElementById('products-grid');
@@ -268,12 +253,8 @@
   // ── Filter pills ──────────────────────────────────────────────
   const FILTER_LABELS = {
     gender:    'Gender',
-    brand:     'Brand',
-    shape:     'Shape',
-    color:     'Color',
     price_min: 'Min TND',
     price_max: 'Max TND',
-    search:    'Search',
   };
 
   function updateFilterPills() {
@@ -338,11 +319,9 @@
     loadProducts();
   }
 
-  // ── Helpers ───────────────────────────────────────────────────
   function escHtml(str) {
     return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
-
   function showToast(msg) {
     let toast = document.getElementById('glassico-toast');
     if (!toast) {
@@ -369,7 +348,7 @@
     }, 2800);
   }
 
-  // ── Init ──────────────────────────────────────────────────────
+  // ── Init
   document.addEventListener('DOMContentLoaded', () => {
     if (!document.getElementById('products-grid')) return;
 
