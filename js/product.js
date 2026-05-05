@@ -96,45 +96,6 @@
     });
   }
 
-  // ── Wishlist toggle ───────────────────────────────────────────
-  function bindWishlist() {
-    const btn = document.getElementById('btn-wishlist');
-    if (!btn) return;
-
-    const wishlist = getWishlist();
-    if (currentProduct && wishlist.includes(currentProduct.id)) {
-      btn.textContent  = '♥';
-      btn.style.color  = 'var(--gold)';
-      btn.style.borderColor = 'var(--gold)';
-    }
-
-    btn.addEventListener('click', () => {
-      if (!currentProduct) return;
-      const wl  = getWishlist();
-      const idx = wl.indexOf(currentProduct.id);
-      if (idx > -1) {
-        wl.splice(idx, 1);
-        btn.textContent  = '♡';
-        btn.style.color  = '';
-        btn.style.borderColor = '';
-        showToast('Removed from wishlist.');
-      } else {
-        wl.push(currentProduct.id);
-        btn.textContent  = '♥';
-        btn.style.color  = 'var(--gold)';
-        btn.style.borderColor = 'var(--gold)';
-        showToast('Saved to wishlist.');
-      }
-      localStorage.setItem('glassico_wishlist', JSON.stringify(wl));
-    });
-  }
-
-  function getWishlist() {
-    try {
-      return JSON.parse(localStorage.getItem('glassico_wishlist')) || [];
-    } catch { return []; }
-  }
-
   // ── Helpers ───────────────────────────────────────────────────
   function setText(id, text) {
     const el = document.getElementById(id);
@@ -150,18 +111,7 @@
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
-  function showError(msg) {
-    const container = document.getElementById('product-detail-container');
-    if (container) {
-      container.innerHTML = `
-        <div style="text-align:center;padding:80px 0;">
-          <div style="font-size:40px;margin-bottom:16px;">😞</div>
-          <h2>Product Not Found</h2>
-          <p style="color:var(--muted);margin-top:8px;">${msg}</p>
-          <a href="shop.html" class="btn-dark mt-24" style="display:inline-flex;margin-top:24px;">BACK TO SHOP</a>
-        </div>`;
-    }
-  }
+
 
   function showToast(msg) {
     let toast = document.getElementById('glassico-toast');
@@ -189,15 +139,12 @@
     }, 2800);
   }
 
-  // ── Init ──────────────────────────────────────────────────────
+  // ── Init
   document.addEventListener('DOMContentLoaded', async () => {
     const params = new URLSearchParams(window.location.search);
     const id     = parseInt(params.get('id'), 10);
 
-    if (!id) {
-      showError('No product ID specified.');
-      return;
-    }
+
 
     const product = await loadProduct(id);
     if (!product) return;
