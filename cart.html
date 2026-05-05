@@ -11,7 +11,6 @@
 </head>
 <body>
 
-  <!-- main.js injects announcement bar + navbar -->
 
   <div class="container" style="padding-top:40px;padding-bottom:80px;">
 
@@ -21,12 +20,8 @@
       <span>YOUR BAG</span>
     </nav>
 
-    <!-- ═══════════════════════════════════════
-         CART LAYOUT
-    ═══════════════════════════════════════ -->
     <div id="cart-content">
 
-      <!-- Empty state -->
       <div class="cart-empty" id="cart-empty" style="display:none;">
         <div class="cart-empty__icon">🛍</div>
         <h2 class="cart-empty__title">Your bag is empty</h2>
@@ -34,11 +29,9 @@
         <a href="shop.html" class="btn-dark">BROWSE THE COLLECTION</a>
       </div>
 
-      <!-- Cart with items -->
       <div id="cart-has-items">
         <div class="cart-layout">
 
-          <!-- Left: items -->
           <div>
             <h1 class="cart-title">Your Selection</h1>
             <div id="cart-items-list">
@@ -46,7 +39,6 @@
             </div>
           </div>
 
-          <!-- Right: summary -->
           <div class="cart-summary" id="cart-summary">
             <div class="cart-summary__title">Summary</div>
 
@@ -87,7 +79,6 @@
 
   </div>
 
-  <!-- main.js injects footer -->
 
   <script src="js/cart.js"></script>
   <script src="js/main.js"></script>
@@ -135,7 +126,6 @@
           </div>`;
       }).join('');
 
-      // Bind controls
       listEl.querySelectorAll('.qty-btn-minus').forEach(btn => {
         btn.addEventListener('click', () => {
           const id   = parseInt(btn.dataset.id);

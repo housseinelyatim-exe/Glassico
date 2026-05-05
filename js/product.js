@@ -1,13 +1,10 @@
-// =============================================================
-//  Glassico — Product Detail Page
-// =============================================================
 
 (function () {
   'use strict';
 
   let currentProduct = null;
 
-  // ── Fetch product ─────────────────────────────────────────────
+  // ── Fetch product
   async function loadProduct(id) {
     try {
       const res  = await fetch(`api/products.php?action=single&id=${id}`);
@@ -20,7 +17,7 @@
     }
   }
 
-  // ── Render ────────────────────────────────────────────────────
+  // ── Rende
   function render(p) {
     currentProduct = p;
 
@@ -47,17 +44,15 @@
     setText('spec-gender',      p.gender ? capitalize(p.gender) : '—');
     setText('spec-color',       p.color || '—');
 
-    // Update document title
     document.title = `${p.name} — Glassico`;
 
-    // Images
     const imgSrc = p.image_url || 'images/placeholder.svg';
     setImage('gallery-main-img', imgSrc, p.name);
 
     const thumbs = document.querySelectorAll('.gallery__thumb');
     thumbs.forEach((t, i) => {
       const img = t.querySelector('img');
-      if (img) img.src = imgSrc; // same image for both thumbs (no multiple images in schema)
+      if (img) img.src = imgSrc;
       t.addEventListener('click', () => {
         setImage('gallery-main-img', img?.src || imgSrc, p.name);
         thumbs.forEach(th => th.classList.remove('active'));
@@ -80,7 +75,7 @@
     }
   }
 
-  // ── Add to cart ───────────────────────────────────────────────
+  // Add to cart
   function bindAddToCart() {
     const btn = document.getElementById('btn-add-to-cart');
     if (!btn) return;

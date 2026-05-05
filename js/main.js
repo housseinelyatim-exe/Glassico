@@ -1,13 +1,8 @@
-// =============================================================
-//  Glassico — Shared Layout Init (runs on every page)
-//  Injects: announcement bar, navbar, footer
-//  Also: active link detection, mobile menu, badge init
-// =============================================================
 
 (function () {
   'use strict';
 
-  // ── Announcement Bar ─────────────────────────────────────────
+  // Announcement Bar
   function createAnnouncementBar() {
     const bar = document.createElement('div');
     bar.className = 'announcement-bar';
@@ -15,7 +10,7 @@
     return bar;
   }
 
-  // ── Navbar ────────────────────────────────────────────────────
+  // Navbar
   function createNavbar() {
     const path     = window.location.pathname;
     const filename = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
@@ -43,22 +38,11 @@
           </a>
           <a href="auth.html" aria-label="Account">👤</a>
         </div>
-
-        <div class="navbar__hamburger" id="hamburger" aria-label="Menu">
-          <span></span><span></span><span></span>
-        </div>
-      </div>
-
-      <div class="navbar__mobile-menu" id="mobile-menu">
-        <a href="shop.html">Shop</a>
-        <a href="cart.html">Cart</a>
-        <a href="auth.html">Account</a>
-      </div>
     `;
     return nav;
   }
 
-  // ── Footer ────────────────────────────────────────────────────
+  // Footer
   function createFooter() {
     const year = new Date().getFullYear();
     const footer = document.createElement('footer');
@@ -116,58 +100,25 @@
     return footer;
   }
 
-  // ── Inject into DOM ───────────────────────────────────────────
   function init() {
     const body = document.body;
 
-    // Announcement bar — prepend before everything
     body.insertBefore(createAnnouncementBar(), body.firstChild);
 
-    // Navbar — after announcement bar
     const bar = body.querySelector('.announcement-bar');
     bar.insertAdjacentElement('afterend', createNavbar());
 
-    // Footer — append at end (unless a footer already exists)
     if (!body.querySelector('footer')) {
       body.appendChild(createFooter());
     }
 
-    // Mobile menu toggle
-    const hamburger  = document.getElementById('hamburger');
-    const mobileMenu = document.getElementById('mobile-menu');
-    if (hamburger && mobileMenu) {
-      hamburger.addEventListener('click', () => {
-        mobileMenu.classList.toggle('open');
-      });
-      // Close on outside click
-      document.addEventListener('click', (e) => {
-        if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
-          mobileMenu.classList.remove('open');
-        }
-      });
-    }
 
-    // Badge flash animation (inject keyframes if not present)
-    if (!document.getElementById('badge-flash-style')) {
-      const style = document.createElement('style');
-      style.id = 'badge-flash-style';
-      style.textContent = `
-        @keyframes badgePop {
-          0%   { transform: scale(1); }
-          40%  { transform: scale(1.4); }
-          70%  { transform: scale(0.9); }
-          100% { transform: scale(1); }
-        }
-        .badge-flash { animation: badgePop 0.35s ease; }
-      `;
-      document.head.appendChild(style);
-    }
 
-    // Update cart badge (Cart module must be loaded before main.js OR we poll)
+
+    // Update cart badge
     if (window.Cart) {
       window.Cart.updateBadge();
     } else {
-      // Fallback: read localStorage directly
       try {
         const cart  = JSON.parse(localStorage.getItem('glassico_cart')) || [];
         const count = cart.reduce((s, i) => s + (i.qty || 0), 0);

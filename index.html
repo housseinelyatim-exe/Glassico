@@ -17,9 +17,7 @@
 
   <!-- main.js injects announcement bar + navbar -->
 
-  <!-- ═══════════════════════════════════════
-       HERO
-  ═══════════════════════════════════════ -->
+  <!-- HERO -->
   <section class="hero container">
     <div class="hero__content">
       <p class="hero__eyebrow">New Collection 2026</p>
@@ -38,9 +36,7 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════
-       BRAND STRIP
-  ═══════════════════════════════════════ -->
+  <!-- BRAND STRIP-->
   <div class="brand-strip">
     <div class="brand-strip__inner">
       <span class="brand-strip__name">Oliver Peoples</span>
@@ -52,9 +48,7 @@
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════
-       CURATED COLLECTIONS
-  ═══════════════════════════════════════ -->
+  <!-- CURATED COLLECTIONS -->
   <section class="collections container">
     <div class="collections__header">
       <div>
@@ -99,9 +93,7 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════
-       FEATURES
-  ═══════════════════════════════════════ -->
+  <!-- FEATURES-->
   <section class="features" style="background:var(--surface);">
     <div class="container">
       <div class="feature-grid">
@@ -129,9 +121,7 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════
-       FEATURED PRODUCTS (dynamic)
-  ═══════════════════════════════════════ -->
+  <!-- FEATURED PRODUCTS -->
   <section style="padding:80px 0;">
     <div class="container">
       <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:36px;">
@@ -147,9 +137,7 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════
-       EDITORIAL BANNER
-  ═══════════════════════════════════════ -->
+  <!-- EDITORIAL BANNER-->
   <section style="background:var(--dark);padding:80px 0;text-align:center;">
     <div class="container-sm">
       <p class="caps" style="color:var(--gold);margin-bottom:16px;">The Glassico Edit</p>
@@ -169,21 +157,21 @@
   <script src="js/cart.js"></script>
   <script src="js/main.js"></script>
   <script>
-    // Load featured products (badge = 'new' OR 'bestseller', sorted by newest)
+    // Load featured products
     document.addEventListener('DOMContentLoaded', async () => {
       try {
         const res  = await fetch('api/products.php?action=list&sort=newest&limit=4');
         const json = await res.json();
-        if (!json.success) return;
+
 
         const grid = document.getElementById('featured-grid');
-        if (!grid) return;
+
 
         json.data.products.forEach(p => {
           const imgSrc = p.image_url || 'images/placeholder.svg';
-          let badgeHtml = '';
-          if (p.badge === 'bestseller') badgeHtml = `<div class="product-card__badge"><span class="badge badge-gold">Bestseller</span></div>`;
-          else if (p.badge === 'new')   badgeHtml = `<div class="product-card__badge"><span class="badge badge-dark">New</span></div>`;
+          let badge= '';
+          if (p.badge === 'bestseller') badge = `<div class="product-card__badge"><span class="badge badge-gold">Bestseller</span></div>`;
+          else if (p.badge === 'new')   badge = `<div class="product-card__badge"><span class="badge badge-dark">New</span></div>`;
 
           const card = document.createElement('div');
           card.className = 'product-card';
@@ -193,9 +181,9 @@
               <div class="product-card__quick-add">+ QUICK ADD</div>
             </div>
             <div class="product-card__body">
-              ${badgeHtml}
+              ${badge}
               <div class="product-card__name">${p.name}</div>
-              <div class="product-card__brand">${p.brand || ''}</div>
+              <div class="product-card__brand">${p.brand}</div>
               <div class="product-card__price">${parseFloat(p.price).toFixed(2)} TND</div>
             </div>`;
 
@@ -209,7 +197,9 @@
 
           grid.appendChild(card);
         });
-      } catch {}
+      } catch (err) {
+        console.error('Error loading featured products:', err);
+      }
     });
   </script>
 </body>
