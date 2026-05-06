@@ -1,9 +1,4 @@
 <?php
-// =============================================================
-//  Glassico — Cloudinary Upload Helper
-//  Manual signed upload — no SDK required.
-// =============================================================
-
 require_once __DIR__ . '/config.php';
 
 /**
@@ -51,7 +46,6 @@ function upload_to_cloudinary(string $tmp_path, string $folder, ?string &$error_
         CURLOPT_SSL_VERIFYPEER => true,
     ];
 
-    // XAMPP/Windows often needs an explicit CA bundle path for HTTPS verification.
     $ca_candidates = [];
     $curl_cainfo   = ini_get('curl.cainfo');
     $openssl_cafile = ini_get('openssl.cafile');

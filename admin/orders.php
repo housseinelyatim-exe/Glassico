@@ -1,9 +1,5 @@
 <?php
-// =============================================================
-//  Glassico — Admin Orders
-//  GET       → all orders paginated with customer info
-//  PATCH ?id=N → update order status
-// =============================================================
+
 
 require_once '../includes/cors.php';
 require_once '../includes/db.php';
@@ -12,7 +8,7 @@ require_admin();
 
 $method = $_SERVER['REQUEST_METHOD'];
 
-// ── GET: all orders ───────────────────────────────────────────
+// ── GET: all orders ──────
 if ($method === 'GET') {
     $page   = max(1, (int) ($_GET['page']   ?? 1));
     $limit  = min(50, max(1, (int) ($_GET['limit'] ?? ORDERS_PER_PAGE)));

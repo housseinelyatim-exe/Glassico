@@ -1,8 +1,4 @@
 <?php
-// =============================================================
-//  Glassico — Admin Login
-//  POST JSON { email, password } → sets $_SESSION['admin_id']
-// =============================================================
 
 require_once '../includes/cors.php';
 require_once '../includes/db.php';

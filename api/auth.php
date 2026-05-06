@@ -1,11 +1,4 @@
 <?php
-// =============================================================
-//  Glassico — API: Authentication
-//  POST ?action=signup   → register new customer
-//  POST ?action=login    → authenticate customer
-//  POST ?action=logout   → destroy session
-//  GET  ?action=session  → return current session info
-// =============================================================
 
 require_once '../includes/cors.php';
 require_once '../includes/db.php';
@@ -13,7 +6,7 @@ require_once '../includes/db.php';
 $method = $_SERVER['REQUEST_METHOD'];
 $action = $_GET['action'] ?? '';
 
-// ── GET: session check ────────────────────────────────────────
+// ── GET: session check ────
 if ($method === 'GET' && $action === 'session') {
     if (is_admin()) {
         echo json_encode([
@@ -64,7 +57,7 @@ if ($method === 'GET' && $action === 'session') {
     exit;
 }
 
-// ── POST actions ──────────────────────────────────────────────
+// ── POST actions ─────
 if ($method !== 'POST') {
     http_response_code(405);
     echo json_encode(['success' => false, 'data' => null, 'error' => 'Method not allowed.']);
@@ -73,7 +66,7 @@ if ($method !== 'POST') {
 
 $body = json_decode(file_get_contents('php://input'), true) ?? [];
 
-// ── POST: signup ──────────────────────────────────────────────
+// ── POST: signup ───
 if ($action === 'signup') {
     $email     = trim($body['email']      ?? '');
     $password  = $body['password']        ?? '';
@@ -102,7 +95,7 @@ if ($action === 'signup') {
     try {
         $pdo = db();
 
-        // Check email uniqueness
+
         $check = $pdo->prepare('SELECT id FROM customers WHERE email = ? LIMIT 1');
         $check->execute([$email]);
         if ($check->fetch()) {
@@ -141,7 +134,7 @@ if ($action === 'signup') {
     exit;
 }
 
-// ── POST: login ───────────────────────────────────────────────
+// ── POST: login ─────
 if ($action === 'login') {
     $email    = trim($body['email']    ?? '');
     $password = $body['password']      ?? '';
@@ -155,7 +148,6 @@ if ($action === 'login') {
     try {
         $pdo = db();
 
-        // Check admin first
         $adminStmt = $pdo->prepare('SELECT id, password_hash FROM admins WHERE email = ? LIMIT 1');
         $adminStmt->execute([$email]);
         $admin = $adminStmt->fetch();
@@ -205,7 +197,7 @@ if ($action === 'login') {
     exit;
 }
 
-// ── POST: logout ──────────────────────────────────────────────
+// ── POST: logout ─────
 if ($action === 'logout') {
     if (is_admin()) {
         logout_admin();

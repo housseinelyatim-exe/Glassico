@@ -1,16 +1,11 @@
 <?php
-// =============================================================
-//  Glassico — API: Orders
-//  POST → create order (guest or authenticated)
-//  GET  ?action=list → customer's own orders (auth required)
-// =============================================================
 
 require_once '../includes/cors.php';
 require_once '../includes/db.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
 
-// ── GET: list customer orders ─────────────────────────────────
+// ── GET
 if ($method === 'GET') {
     $action = $_GET['action'] ?? '';
 

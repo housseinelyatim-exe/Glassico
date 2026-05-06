@@ -1,11 +1,5 @@
 <?php
-// =============================================================
-//  Glassico — Admin Products CRUD
-//  GET    → paginated list (active by default)
-//  POST   → create product
-//  PATCH  ?id=N → update product / stock
-//  DELETE ?id=N → hard-delete
-// =============================================================
+
 
 require_once '../includes/cors.php';
 require_once '../includes/db.php';
@@ -14,7 +8,7 @@ require_admin();
 
 $method = $_SERVER['REQUEST_METHOD'];
 
-// ── GET: product list ─────────────────────────────────────────
+// ── GET: product list ────
 if ($method === 'GET') {
     $page   = max(1, (int) ($_GET['page'] ?? 1));
     $limit  = min(50, max(1, (int) ($_GET['limit'] ?? PRODUCTS_PER_PAGE)));
@@ -74,7 +68,7 @@ if ($method === 'GET') {
     exit;
 }
 
-// ── POST: create product ──────────────────────────────────────
+// ── POST: create product ────
 if ($method === 'POST') {
     $body = json_decode(file_get_contents('php://input'), true) ?? [];
 
@@ -137,7 +131,7 @@ if ($method === 'POST') {
     exit;
 }
 
-// ── PATCH: update product ─────────────────────────────────────
+// ── PATCH: update product ───
 if ($method === 'PATCH') {
     $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     if (!$id) {
@@ -197,7 +191,7 @@ if ($method === 'PATCH') {
     exit;
 }
 
-// ── DELETE: hard-delete ───────────────────────────────────────
+// ── DELETE: hard-delete ─────
 if ($method === 'DELETE') {
     $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     if (!$id) {

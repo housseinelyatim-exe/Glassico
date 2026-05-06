@@ -1,8 +1,4 @@
 <?php
-// =============================================================
-//  Glassico — Admin Dashboard Metrics
-//  GET → {total_sales_mtd, active_orders, low_stock, recent_orders}
-// =============================================================
 
 require_once '../includes/cors.php';
 require_once '../includes/db.php';
@@ -18,7 +14,6 @@ require_admin();
 try {
     $pdo = db();
 
-    // Total sales month-to-date (exclude cancelled)
     $salesStmt = $pdo->prepare(
         "SELECT COALESCE(SUM(total), 0)
          FROM orders
@@ -29,7 +24,7 @@ try {
     $salesStmt->execute();
     $totalSalesMtd = (float) $salesStmt->fetchColumn();
 
-    // Active orders count
+
     $activeStmt = $pdo->prepare(
         "SELECT COUNT(*) FROM orders
          WHERE status IN ('pending','processing')"
@@ -37,7 +32,7 @@ try {
     $activeStmt->execute();
     $activeOrders = (int) $activeStmt->fetchColumn();
 
-    // Low stock count (stock < 5 and active)
+
     $lowStockStmt = $pdo->prepare(
         'SELECT COUNT(*) FROM products
          WHERE stock < 5 AND is_active = 1'
@@ -45,7 +40,6 @@ try {
     $lowStockStmt->execute();
     $lowStock = (int) $lowStockStmt->fetchColumn();
 
-    // Recent 5 orders with customer email
     $recentStmt = $pdo->prepare(
         "SELECT o.id,
                 o.status,
@@ -61,7 +55,6 @@ try {
     $recentStmt->execute();
     $recentOrders = $recentStmt->fetchAll();
 
-    // Top selling products (by quantity this month)
     $topStmt = $pdo->prepare(
         "SELECT p.id, p.name, p.brand, p.image_url,
                 SUM(oi.quantity) AS units_sold

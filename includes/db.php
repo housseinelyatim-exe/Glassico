@@ -1,10 +1,5 @@
 <?php
-// =============================================================
-//  Glassico — PDO Singleton
-//  Returns the shared $pdo instance. Throws a RuntimeException
-//  on connection failure so callers can catch and return a
-//  proper 500 JSON response without exposing credentials.
-// =============================================================
+
 
 require_once __DIR__ . '/config.php';
 

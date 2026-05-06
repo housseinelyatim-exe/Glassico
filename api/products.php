@@ -1,19 +1,11 @@
 <?php
-// =============================================================
-//  Glassico — API: Products
-//  GET  ?action=list    → paginated + filtered product list
-//  GET  ?action=single&id=N → single product
-//  POST   (admin)       → create product
-//  PATCH  (admin)       → update product
-//  DELETE (admin)       → hard-delete product
-// =============================================================
 
 require_once '../includes/cors.php';
 require_once '../includes/db.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
 
-// ── GET ───────────────────────────────────────────────────────
+// ── GET ───
 if ($method === 'GET') {
     $action = $_GET['action'] ?? 'list';
 

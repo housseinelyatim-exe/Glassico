@@ -1,7 +1,4 @@
 <?php
-// =============================================================
-//  Glassico — Authentication Helpers
-// =============================================================
 
 require_once __DIR__ . '/config.php';
 
@@ -26,7 +23,7 @@ function start_session(): void
     session_start();
 }
 
-// ── Customer helpers ──────────────────────────────────────────
+// ── Customer helpers ──────
 
 function is_logged_in(): bool
 {
@@ -54,10 +51,7 @@ function logout_customer(): void
     session_destroy();
 }
 
-/**
- * Halt with 401 JSON if the customer is not logged in.
- * Used by API endpoints that require authentication.
- */
+
 function require_login(): void
 {
     if (!is_logged_in()) {
@@ -71,7 +65,7 @@ function require_login(): void
     }
 }
 
-// ── Admin helpers ─────────────────────────────────────────────
+// ── Admin helpers ──────
 
 function is_admin(): bool
 {
@@ -99,9 +93,7 @@ function logout_admin(): void
     session_destroy();
 }
 
-/**
- * Halt with 403 JSON if the caller does not have an active admin session.
- */
+
 function require_admin(): void
 {
     if (!is_admin()) {

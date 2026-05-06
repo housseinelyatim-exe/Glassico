@@ -1,9 +1,5 @@
 <?php
-// =============================================================
-//  Glassico — API: Image Upload (admin only)
-//  POST multipart/form-data with field "image"
-//  → uploads to Cloudinary → returns secure_url
-// =============================================================
+
 
 require_once '../includes/cors.php';
 require_once '../includes/db.php';
@@ -17,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 require_admin();
 
-// Validate upload
+
 if (empty($_FILES['image']) || $_FILES['image']['error'] !== UPLOAD_ERR_OK) {
     $uploadErrors = [
         UPLOAD_ERR_INI_SIZE   => 'File exceeds server upload limit.',
@@ -42,7 +38,7 @@ $tmpPath  = $file['tmp_name'];
 $origName = $file['name'];
 $mimeType = mime_content_type($tmpPath);
 
-// Allow only common image types
+
 $allowedMimes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
 if (!in_array($mimeType, $allowedMimes, true)) {
     http_response_code(415);
@@ -54,7 +50,7 @@ if (!in_array($mimeType, $allowedMimes, true)) {
     exit;
 }
 
-// 10 MB max
+
 $maxBytes = 10 * 1024 * 1024;
 if ($file['size'] > $maxBytes) {
     http_response_code(413);
